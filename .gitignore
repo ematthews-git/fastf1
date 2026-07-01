@@ -1,0 +1,7 @@
+.DS_Store
+f1_cache/
+.pytest_cache/
+.f1strategy_cache/
+
+__pycache__
+venv/

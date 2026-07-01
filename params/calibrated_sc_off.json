@@ -1,0 +1,37 @@
+{
+  "params": {
+    "deg_scale": 1.3995041994771915,
+    "pit_stop_penalty": 11.91462990086926,
+    "stint_risk": 0.15658755481191042,
+    "risk_free_life": 19.434892720704205,
+    "sc_influence": 0.0
+  },
+  "sc_on": false,
+  "calibrated": "2026-07-01",
+  "meta": {
+    "n_trials": 220,
+    "n_cases": 15,
+    "use_practice": true,
+    "in_sample": {
+      "stop_acc": 0.8,
+      "comp_acc": 0.4,
+      "pit_mae": 5.5
+    },
+    "tracks": [
+      "Austria",
+      "Bahrain",
+      "Belgium",
+      "Canada",
+      "Italy",
+      "Miami",
+      "Silverstone",
+      "Spain"
+    ],
+    "cv": {
+      "cv_stop_acc": 0.7333333333333333,
+      "cv_comp_acc": 0.4,
+      "cv_pit_mae": 7.0,
+      "n": 15
+    }
+  }
+}
