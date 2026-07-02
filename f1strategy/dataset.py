@@ -21,6 +21,8 @@ from .data.loaders import load_race, event_name
 from .data.laps import clean_laps, race_lap_count
 from .tyre import build_tyre_model
 from .pitloss import pit_loss
+from .overtaking import overtake_ease
+from .field import field_from_session
 from .observations import race_observation, RaceObservation
 
 CACHE_DIR = ".f1strategy_cache"
@@ -40,6 +42,9 @@ DEFAULT_RACES: list[tuple[int, str]] = [
     (2023, "Canada"), (2024, "Canada"), (2025, "Canada"),
     (2024, "Belgium"), (2025, "Belgium"),
     (2024, "Bahrain"), (2025, "Australia"),
+    # low overtaking-ease circuits, where track position / traffic drives strategy
+    (2023, "Hungary"), (2024, "Hungary"), (2025, "Hungary"),
+    (2024, "Netherlands"), (2023, "Monaco"),
 ]
 
 
@@ -85,9 +90,16 @@ def build_case(year: int, track: str, seasons_back: int = 3,
     ctx = TrackContext(
         track=track, year=year, event_name=event_name(year, track, fallback=obs.event_name),
         n_laps=n_laps, pit_loss=pit_loss(track), fuel_rate=tm["fuel_rate"],
-        compounds=tm["compounds"], seasons_used=tuple(tm["seasons_used"]),
-        notes=f"tyre sources: {tm['sources']}",
+        compounds=tm["compounds"], overtake_ease=overtake_ease(track),
+        seasons_used=tuple(tm["seasons_used"]), notes=f"tyre sources: {tm['sources']}",
     )
+    # Attach the real field, focal = the top reference front-runner (its actual grid).
+    drv = obs.drivers
+    if drv is not None and len(drv):
+        elig = drv[drv["eligible"]]
+        if len(elig):
+            focal = elig.sort_values("freedom", ascending=False).iloc[0]["Driver"]
+            ctx.field = field_from_session(race, ctx, focal)
     return RaceCase(ctx=ctx, obs=obs)
 
 

@@ -48,6 +48,10 @@ pred = predict_strategy("Monza", 2025, use_practice=True)
 # compare safety-car hedging on/off
 pred = predict_strategy("Monza", 2025, use_sc=False)
 
+# opt-in: expected-outcome-vs-field objective (track position / traffic)
+pred = predict_strategy("Monaco", 2025, use_traffic=True, focal_grid=2)
+pred.exp_position, pred.position_dist
+
 print(pred.summary())            # optimal strategy + P(stops)
 pred.optimal                     # StrategyResult(compounds, pit_laps, ...)
 pred.p_by_stops, pred.pit_windows
@@ -57,8 +61,10 @@ CLI:
 
 ```
 python -m f1strategy.cli predict "Monza" 2025 --practice
+python -m f1strategy.cli predict "Monaco" 2025 --traffic --grid 2   # expected-outcome objective
 python -m f1strategy.cli calibrate --trials 250 --cv --practice   # writes params/calibrated_sc_off.json
 python -m f1strategy.cli calibrate --sc-on --practice             # writes params/calibrated_sc_on.json
+python -m f1strategy.cli calibrate --traffic --practice           # writes params/calibrated_sc_off_traffic.json
 python -m f1strategy.cli backtest
 ```
 
@@ -73,8 +79,31 @@ Calibrated, global, interpretable:
 - `stint_risk` + `risk_free_life` — linear penalty on tyre age past a knee; risk
   aversion / the tendency to pit before the cliff (biases pit laps earlier).
 - `sc_influence` — strength of safety-car hedging (SC-on profile only).
+- `dirty_air_loss`, `overtake_scale`, `dirty_air_gap` — traffic-objective params (opt-in;
+  see below).
 
-Two profiles are persisted — `params/calibrated_sc_{on,off}.json` — selected by `use_sc`.
+Profiles are persisted as `params/calibrated_sc_{on,off}[_traffic].json`, selected by
+`use_sc` / `use_traffic`.
+
+## Traffic / track-position objective (opt-in, `use_traffic=True`)
+
+A full **ghost-field race simulator** (`racesim.py` + `field.py` + `overtaking.py`) that
+replaces "minimise clean-air time" with "minimise expected traffic-inclusive time /
+maximise expected finishing position". The focal car races through a field (real grids +
+strategies for backtest; qualifying grid + practice pace for prediction); a per-track
+overtaking-difficulty model makes a car stuck behind one it cannot pass lose time, so
+track position and pitting-into-traffic finally have value.
+
+**It is off by default because cross-validation rejected it as a global model.** It lifts
+*in-sample* compound accuracy (26%→37%, flipping Miami/Canada to the real M→H) but
+*generalises worse* — held-out compound 21%→11%, stop 63%→53% (a large train→CV gap =
+overfitting). Why: the calibration target is front-runners, who run in **clean air**, so
+traffic is mostly noise for them, and the extra parameters overfit 19 races. It is fully
+built, unit-tested, and usable via `--traffic` / `use_traffic=True` for the cases where it
+does help (midfield cars, low-ease circuits). Making it the default would need: the tyre
+**cliff** fixed first (the bigger compound lever), a two-way sim (the ghost model is
+one-way, so a leader can't hold rivals up), and ideally calibration on cars that actually
+sit in traffic.
 
 ## Porting into a backend pipeline
 

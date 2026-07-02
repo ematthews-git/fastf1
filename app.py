@@ -99,7 +99,7 @@ def lap_record(track: str):
     )
 
 
-def get_prev_strategy(year, track):
+def get_strategy(year, track):
     # two years ?
     session = f1.get_session(year, track, "R")
     session.load()
@@ -209,7 +209,7 @@ def main():
     print("Hello World")
     # print(get_upcoming(TRACK))
     # lap_record(TRACK)
-    get_prev_strategy(2026, "barcelona")
+    get_strategy(2026, "barcelona")
 
 
 if __name__ == "__main__":

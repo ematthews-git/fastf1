@@ -26,6 +26,8 @@ class OptimizeResult:
     optimal: StrategyResult
     p_by_stops: dict[int, float]
     pit_windows: dict[int, tuple[int, int]]
+    exp_position: float = 0.0
+    position_dist: dict = field(default_factory=dict)
     tables: dict = field(default=None, repr=False)
 
 
@@ -152,8 +154,48 @@ def _pit_windows(results: list[StrategyResult], n_stops: int) -> dict[int, tuple
     return windows
 
 
+def _rescore_traffic(results: list[StrategyResult], ctx: TrackContext,
+                     params: GlobalParams, config: SimConfig, tables: dict
+                     ) -> list[StrategyResult]:
+    """Re-score the top pace candidates by expected traffic-inclusive outcome.
+
+    Only the top-K by clean-air time are raced through the field (traffic reorders
+    the competitive set but rarely promotes an off-pace strategy) — plus the best
+    candidate of *each* stop count, so the stop-count distribution stays honest.
+    Returns only the re-scored subset; ``race_time`` now holds the traffic-inclusive
+    time (a different scale from clean-air time, so the two are never mixed).
+    """
+    from . import racesim
+    perlap = racesim.perlap_costs(tables)
+    ghosts = racesim.precompute_ghosts(ctx.field, ctx, perlap)
+    fg, fpo = ctx.field.focal_grid, ctx.field.focal_pace_offset
+
+    results.sort(key=lambda r: r.race_time)
+    seed: dict[int, StrategyResult] = {}
+    for r in results:
+        seed.setdefault(r.n_stops, r)                 # best clean-air per stop count
+    topk = list(seed.values())
+    for r in results[:config.traffic_topk]:
+        if r not in topk:
+            topk.append(r)
+
+    for r in topk:
+        out = racesim.simulate_focal(r.compounds, r.pit_laps, ctx, params, perlap,
+                                     ghosts, fg, fpo)
+        sc = (simulator.sc_adjustment(r.compounds, r.pit_laps, ctx, params, config)
+              if config.use_sc and ctx.sc is not None else 0.0)
+        r.race_time = out.exp_time + sc
+        r.exp_position = out.exp_position
+    return topk
+
+
 def optimize(ctx: TrackContext, params: GlobalParams, config: SimConfig) -> OptimizeResult:
-    """Rank every legal strategy and summarise the distribution."""
+    """Rank every legal strategy and summarise the distribution.
+
+    Clean-air time when ``use_traffic`` is off or no field is attached (exactly v1);
+    otherwise the top pace candidates are re-scored by expected traffic-inclusive
+    outcome (see :func:`_rescore_traffic`) and ranked by that.
+    """
     available = ctx.available
     tables = simulator.build_tables(ctx, params)
     results: list[StrategyResult] = []
@@ -171,6 +213,10 @@ def optimize(ctx: TrackContext, params: GlobalParams, config: SimConfig) -> Opti
                                       race_time=t, n_stops=len(pit_laps)))
     if not results:
         raise ValueError("No feasible strategy — check compounds/among min_stint vs n_laps.")
+
+    traffic = config.use_traffic and ctx.field is not None
+    if traffic:
+        results = _rescore_traffic(results, ctx, params, config, tables)
 
     results.sort(key=lambda r: r.race_time)
     best = results[0].race_time
@@ -194,5 +240,12 @@ def optimize(ctx: TrackContext, params: GlobalParams, config: SimConfig) -> Opti
 
     optimal = results[0]
     windows = _pit_windows(results, optimal.n_stops)
+    pos_dist: dict[int, float] = {}
+    if traffic:
+        for r in results:
+            k = int(round(r.exp_position))
+            pos_dist[k] = pos_dist.get(k, 0.0) + r.prob
+        pos_dist = dict(sorted(pos_dist.items()))
     return OptimizeResult(ranked=results, optimal=optimal, p_by_stops=p_by_stops,
-                          pit_windows=windows, tables=tables)
+                          pit_windows=windows, exp_position=optimal.exp_position,
+                          position_dist=pos_dist, tables=tables)

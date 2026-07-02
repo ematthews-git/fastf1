@@ -85,6 +85,27 @@ def load_results(session):
     return out
 
 
+def load_quali(year: int, track):
+    """Load a qualifying session (for the prediction grid)."""
+    return _load(year, track, "Q")
+
+
+def grid_order(session) -> list[str]:
+    """Ordered driver codes front-to-back from a session's results.
+
+    Prefers ``GridPosition`` (a race session) and falls back to ``Position`` (a
+    qualifying session). Pit-lane/0 entries are dropped.
+    """
+    res = getattr(session, "results", None)
+    if res is None or not len(res):
+        return []
+    col = "GridPosition" if ("GridPosition" in res.columns
+                             and (res["GridPosition"] > 0).any()) else "Position"
+    r = res.dropna(subset=[col])
+    r = r[r[col] > 0].sort_values(col)
+    return [a for a in r["Abbreviation"].tolist() if isinstance(a, str) and a]
+
+
 def load_practice_sessions(year: int, track) -> list[tuple[str, object]]:
     """Load every available practice session for a weekend.
 

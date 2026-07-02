@@ -21,7 +21,8 @@ from typing import Optional
 import numpy as np
 import optuna
 
-from .config import GlobalParams, SimConfig, SEARCH_SPACE, SC_ONLY_PARAMS
+from .config import (GlobalParams, SimConfig, SEARCH_SPACE, SC_ONLY_PARAMS,
+                     TRAFFIC_ONLY_PARAMS, CLEANAIR_ONLY_PARAMS)
 from . import optimizer, backtest
 
 optuna.logging.set_verbosity(optuna.logging.WARNING)
@@ -88,8 +89,17 @@ def dataset_loss(cases, params: GlobalParams, config: SimConfig,
 # ---------------------------------------------------------------------- optuna
 
 
-def _active_params(sc_on: bool) -> list[str]:
-    return [p for p in SEARCH_SPACE if sc_on or p not in SC_ONLY_PARAMS]
+def _active_params(sc_on: bool, use_traffic: bool) -> list[str]:
+    active = []
+    for p in SEARCH_SPACE:
+        if p in SC_ONLY_PARAMS and not sc_on:
+            continue
+        if p in TRAFFIC_ONLY_PARAMS and not use_traffic:
+            continue
+        if p in CLEANAIR_ONLY_PARAMS and use_traffic:      # pit cost is emergent under traffic
+            continue
+        active.append(p)
+    return active
 
 
 def _objective(cases, config: SimConfig, sc_on: bool, active: list[str]):
@@ -103,7 +113,7 @@ def calibrate(cases, config: SimConfig, sc_on: Optional[bool] = None,
               n_trials: int = 200, seed: int = 0, verbose: bool = True) -> GlobalParams:
     """Fit global parameters on all provided cases; returns the best GlobalParams."""
     sc_on = config.use_sc if sc_on is None else sc_on
-    active = _active_params(sc_on)
+    active = _active_params(sc_on, config.use_traffic)
     study = optuna.create_study(direction="minimize",
                                 sampler=optuna.samplers.TPESampler(seed=seed))
     study.optimize(_objective(cases, config, sc_on, active), n_trials=n_trials,
@@ -154,18 +164,26 @@ def cross_validate(cases, config: SimConfig, sc_on: Optional[bool] = None,
 # ------------------------------------------------------------------ persistence
 
 
-def save_params(params: GlobalParams, sc_on: bool, meta: Optional[dict] = None) -> str:
+def _params_path(sc_on: bool, use_traffic: bool) -> str:
+    suffix = "_traffic" if use_traffic else ""
+    return os.path.join(PARAMS_DIR, f"calibrated_sc_{'on' if sc_on else 'off'}{suffix}.json")
+
+
+def save_params(params: GlobalParams, sc_on: bool, use_traffic: bool = False,
+                meta: Optional[dict] = None) -> str:
     os.makedirs(PARAMS_DIR, exist_ok=True)
-    path = os.path.join(PARAMS_DIR, f"calibrated_sc_{'on' if sc_on else 'off'}.json")
+    path = _params_path(sc_on, use_traffic)
     with open(path, "w") as f:
-        json.dump({"params": params.to_dict(), "sc_on": sc_on,
+        json.dump({"params": params.to_dict(), "sc_on": sc_on, "use_traffic": use_traffic,
                    "calibrated": str(date.today()), "meta": meta or {}}, f, indent=2)
     return path
 
 
-def load_params(sc_on: bool) -> GlobalParams:
-    path = os.path.join(PARAMS_DIR, f"calibrated_sc_{'on' if sc_on else 'off'}.json")
+def load_params(sc_on: bool, use_traffic: bool = False) -> GlobalParams:
+    path = _params_path(sc_on, use_traffic)
     if not os.path.exists(path):
-        return GlobalParams()          # uncalibrated priors as a safe fallback
+        path = _params_path(sc_on, False)          # fall back to the clean-air profile
+    if not os.path.exists(path):
+        return GlobalParams()                      # uncalibrated priors as a safe fallback
     with open(path) as f:
         return GlobalParams.from_dict(json.load(f)["params"])

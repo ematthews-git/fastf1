@@ -20,6 +20,8 @@ from .data.loaders import load_race, event_name
 from .data.laps import clean_laps, race_lap_count
 from .tyre import build_tyre_model
 from .pitloss import pit_loss
+from .overtaking import overtake_ease
+from .field import field_from_quali
 from .dataset import expected_lap_count
 from . import optimizer, safetycar, calibrate
 
@@ -47,29 +49,38 @@ def build_context(track: str, year: int, use_practice: bool = False, use_sc: boo
     return TrackContext(
         track=track, year=year, event_name=event_name(year, track),
         n_laps=n_laps, pit_loss=pl, fuel_rate=tm["fuel_rate"],
-        compounds=tm["compounds"], sc=sc, seasons_used=tuple(tm["seasons_used"]),
-        notes=f"tyre sources: {tm['sources']}",
+        compounds=tm["compounds"], sc=sc, overtake_ease=overtake_ease(track),
+        seasons_used=tuple(tm["seasons_used"]), notes=f"tyre sources: {tm['sources']}",
     )
 
 
 def predict_strategy(track: str, year: int, use_practice: bool = False,
-                     use_sc: bool = True, params: Optional[GlobalParams] = None,
+                     use_sc: bool = True, use_traffic: bool = False,
+                     focal_grid: int = 2, params: Optional[GlobalParams] = None,
                      config: Optional[SimConfig] = None,
                      seasons_back: int = 3) -> StrategyPrediction:
     """Predict the optimal strategy + distribution for a race.
 
-    ``params`` defaults to the calibrated profile matching ``use_sc``; pass an
-    explicit :class:`GlobalParams` to override (e.g. for experiments).
+    ``params`` defaults to the calibrated profile matching ``use_sc``/``use_traffic``;
+    pass an explicit :class:`GlobalParams` to override. With ``use_traffic`` the
+    strategy is chosen by expected outcome against the qualifying-grid field, from
+    grid slot ``focal_grid`` (default a representative front-runner).
     """
     if config is None:
-        config = SimConfig(use_sc=use_sc, use_practice=use_practice)
+        config = SimConfig(use_sc=use_sc, use_traffic=use_traffic, use_practice=use_practice)
     else:
-        config.use_sc, config.use_practice = use_sc, use_practice
+        config.use_sc, config.use_traffic, config.use_practice = use_sc, use_traffic, use_practice
     if params is None:
-        params = calibrate.load_params(sc_on=use_sc)
+        params = calibrate.load_params(sc_on=use_sc, use_traffic=use_traffic)
 
     ctx = build_context(track, year, use_practice=use_practice, use_sc=use_sc,
                         seasons_back=seasons_back)
+    if config.use_traffic:
+        # rivals run the clean-air optimum (so the ghosts pit sensibly); build the field
+        # from the qualifying grid and race the focal front-runner through it.
+        clean = optimizer.optimize(ctx, params, SimConfig(use_sc=use_sc, use_traffic=False))
+        ctx.field = field_from_quali(track, year, ctx, params, focal_grid=focal_grid,
+                                     rival_strategy=(clean.optimal.compounds, clean.optimal.pit_laps))
     res = optimizer.optimize(ctx, params, config)
 
     return StrategyPrediction(
@@ -77,4 +88,6 @@ def predict_strategy(track: str, year: int, use_practice: bool = False,
         optimal=res.optimal, ranked=res.ranked,
         p_by_stops=res.p_by_stops, pit_windows=res.pit_windows,
         context=ctx, used_practice=use_practice, used_sc=use_sc,
+        used_traffic=config.use_traffic, exp_position=res.exp_position,
+        position_dist=res.position_dist,
     )
