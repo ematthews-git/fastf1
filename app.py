@@ -2,6 +2,8 @@ import fastf1 as f1
 from fastf1 import plotting as f1plt
 import requests
 import pandas as pd
+import argparse
+
 
 TRACK = "silverstone"
 YEAR = 2025
@@ -204,13 +206,26 @@ def _pit_loss_normal():
         ]
 
 
-def main():
+def main(year, track):
     # run functions to test
     print("Hello World")
-    # print(get_upcoming(TRACK))
-    # lap_record(TRACK)
-    get_strategy(2026, "barcelona")
+
+    # print(get_upcoming(track))
+    # lap_record(track)
+    get_strategy(year, track)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="F1 strategy tool")
+
+    parser.add_argument(
+        "--year", type=int, required=True, help="Season year (e.g. 2026)"
+    )
+
+    parser.add_argument(
+        "--track", type=str, required=True, help="Track name (e.g. barcelona)"
+    )
+
+    args = parser.parse_args()
+
+    main(args.year, args.track)

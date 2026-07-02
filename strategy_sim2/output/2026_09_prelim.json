@@ -1,0 +1,5598 @@
+{
+  "meta": {
+    "generated_at": "2026-07-02T09:32:01.204357+00:00",
+    "mode": "prelim",
+    "year": 2026,
+    "round": 9,
+    "circuit": "Silverstone",
+    "n_drivers": 22,
+    "n_sims": 200,
+    "seed": 20260702,
+    "allocation": [
+      "SOFT",
+      "MEDIUM",
+      "HARD"
+    ],
+    "training_window": {
+      "start_year": 2021,
+      "end_year": 2026
+    }
+  },
+  "circuit_profile": {
+    "n_laps": 52,
+    "pit_loss_s": 19.66,
+    "base_lap_time_s": 93.17,
+    "deg_severity": 0.023,
+    "sc_prob": 1.0,
+    "vsc_prob": 0.5,
+    "overtaking_difficulty": 0.76,
+    "n_races_in_history": 2,
+    "fallback": false
+  },
+  "drivers": {
+    "ANT": {
+      "grid": 1,
+      "team": "Mercedes",
+      "base_pace_s": 91.691,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 1.94,
+          "expected_finish_all": 4.51,
+          "median_finish": 1.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.525,
+          "p_podium": 0.755,
+          "p_points": 0.845,
+          "p_dnf": 0.14,
+          "p_optimal": 0.03,
+          "mean_race_time_s": 5093.41,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "1": 0.525,
+            "2": 0.16,
+            "3": 0.07,
+            "4": 0.045,
+            "5": 0.03,
+            "7": 0.015,
+            "11": 0.005,
+            "12": 0.005,
+            "13": 0.005,
+            "16": 0.005,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.045,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 2.25,
+          "expected_finish_all": 4.78,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.41,
+          "p_podium": 0.74,
+          "p_points": 0.85,
+          "p_dnf": 0.14,
+          "p_optimal": 0.56,
+          "mean_race_time_s": 5088.61,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "1": 0.41,
+            "2": 0.195,
+            "3": 0.135,
+            "4": 0.035,
+            "5": 0.01,
+            "6": 0.045,
+            "7": 0.015,
+            "8": 0.005,
+            "11": 0.005,
+            "14": 0.005,
+            "16": 0.005,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.045,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 2.0,
+          "expected_finish_all": 4.57,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.48,
+          "p_podium": 0.74,
+          "p_points": 0.86,
+          "p_dnf": 0.14,
+          "p_optimal": 0.11,
+          "mean_race_time_s": 5085.36,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "1": 0.48,
+            "2": 0.175,
+            "3": 0.085,
+            "4": 0.055,
+            "5": 0.02,
+            "6": 0.025,
+            "7": 0.01,
+            "9": 0.005,
+            "10": 0.005,
+            "16": 0.005,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.045,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 2.26,
+          "expected_finish_all": 4.79,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.455,
+          "p_podium": 0.71,
+          "p_points": 0.85,
+          "p_dnf": 0.14,
+          "p_optimal": 0.0,
+          "mean_race_time_s": 5096.02,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "1": 0.455,
+            "2": 0.18,
+            "3": 0.075,
+            "4": 0.04,
+            "5": 0.04,
+            "6": 0.03,
+            "7": 0.02,
+            "8": 0.005,
+            "10": 0.005,
+            "12": 0.005,
+            "15": 0.005,
+            "16": 0.005,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.045,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 2.38,
+          "expected_finish_all": 4.89,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.43,
+          "p_podium": 0.685,
+          "p_points": 0.845,
+          "p_dnf": 0.14,
+          "p_optimal": 0.01,
+          "mean_race_time_s": 5090.94,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "1": 0.43,
+            "2": 0.19,
+            "3": 0.065,
+            "4": 0.07,
+            "5": 0.035,
+            "6": 0.02,
+            "7": 0.025,
+            "8": 0.005,
+            "9": 0.005,
+            "11": 0.005,
+            "14": 0.005,
+            "16": 0.01,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.045,
+            "22": 0.03
+          }
+        }
+      ]
+    },
+    "HAM": {
+      "grid": 2,
+      "team": "Ferrari",
+      "base_pace_s": 91.858,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 2.8,
+          "expected_finish_all": 4.39,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.295,
+          "p_podium": 0.705,
+          "p_points": 0.885,
+          "p_dnf": 0.09,
+          "p_optimal": 0.045,
+          "mean_race_time_s": 5098.88,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "1": 0.295,
+            "2": 0.24,
+            "3": 0.17,
+            "4": 0.06,
+            "5": 0.065,
+            "6": 0.035,
+            "7": 0.005,
+            "8": 0.01,
+            "10": 0.005,
+            "11": 0.005,
+            "12": 0.01,
+            "14": 0.005,
+            "16": 0.005,
+            "17": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.015,
+            "21": 0.035,
+            "22": 0.02
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 2.58,
+          "expected_finish_all": 4.18,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.345,
+          "p_podium": 0.735,
+          "p_points": 0.875,
+          "p_dnf": 0.09,
+          "p_optimal": 0.465,
+          "mean_race_time_s": 5089.11,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "1": 0.345,
+            "2": 0.295,
+            "3": 0.095,
+            "4": 0.08,
+            "5": 0.03,
+            "6": 0.005,
+            "7": 0.02,
+            "9": 0.005,
+            "11": 0.005,
+            "12": 0.015,
+            "13": 0.01,
+            "15": 0.005,
+            "17": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.015,
+            "21": 0.035,
+            "22": 0.02
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 2.4,
+          "expected_finish_all": 4.03,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.39,
+          "p_podium": 0.74,
+          "p_points": 0.9,
+          "p_dnf": 0.09,
+          "p_optimal": 0.095,
+          "mean_race_time_s": 5088.91,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "1": 0.39,
+            "2": 0.215,
+            "3": 0.135,
+            "4": 0.08,
+            "5": 0.02,
+            "6": 0.04,
+            "7": 0.005,
+            "8": 0.01,
+            "10": 0.005,
+            "13": 0.005,
+            "14": 0.005,
+            "17": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.015,
+            "21": 0.035,
+            "22": 0.02
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 2.9,
+          "expected_finish_all": 4.48,
+          "median_finish": 2.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.24,
+          "p_podium": 0.68,
+          "p_points": 0.885,
+          "p_dnf": 0.09,
+          "p_optimal": 0.02,
+          "mean_race_time_s": 5096.84,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "1": 0.24,
+            "2": 0.28,
+            "3": 0.16,
+            "4": 0.095,
+            "5": 0.045,
+            "6": 0.03,
+            "7": 0.025,
+            "10": 0.01,
+            "11": 0.01,
+            "12": 0.005,
+            "13": 0.01,
+            "17": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.015,
+            "21": 0.035,
+            "22": 0.02
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 2.77,
+          "expected_finish_all": 4.36,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.29,
+          "p_podium": 0.67,
+          "p_points": 0.905,
+          "p_dnf": 0.09,
+          "p_optimal": 0.005,
+          "mean_race_time_s": 5092.34,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "1": 0.29,
+            "2": 0.185,
+            "3": 0.195,
+            "4": 0.085,
+            "5": 0.065,
+            "6": 0.055,
+            "7": 0.03,
+            "14": 0.005,
+            "17": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.015,
+            "21": 0.035,
+            "22": 0.02
+          }
+        }
+      ]
+    },
+    "RUS": {
+      "grid": 3,
+      "team": "Mercedes",
+      "base_pace_s": 91.966,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 2.97,
+          "expected_finish_all": 4.53,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            20.0
+          ],
+          "p_win": 0.215,
+          "p_podium": 0.65,
+          "p_points": 0.905,
+          "p_dnf": 0.09,
+          "p_optimal": 0.415,
+          "mean_race_time_s": 5103.0,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "1": 0.215,
+            "2": 0.22,
+            "3": 0.215,
+            "4": 0.11,
+            "5": 0.055,
+            "6": 0.04,
+            "7": 0.025,
+            "8": 0.025,
+            "15": 0.005,
+            "19": 0.03,
+            "20": 0.025,
+            "21": 0.02,
+            "22": 0.015
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 3.35,
+          "expected_finish_all": 4.87,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            20.0
+          ],
+          "p_win": 0.19,
+          "p_podium": 0.555,
+          "p_points": 0.9,
+          "p_dnf": 0.09,
+          "p_optimal": 0.08,
+          "mean_race_time_s": 5110.14,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "1": 0.19,
+            "2": 0.23,
+            "3": 0.135,
+            "4": 0.13,
+            "5": 0.11,
+            "6": 0.035,
+            "7": 0.03,
+            "8": 0.01,
+            "9": 0.01,
+            "10": 0.02,
+            "12": 0.005,
+            "15": 0.005,
+            "19": 0.03,
+            "20": 0.025,
+            "21": 0.02,
+            "22": 0.015
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 3.18,
+          "expected_finish_all": 4.71,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            20.0
+          ],
+          "p_win": 0.23,
+          "p_podium": 0.605,
+          "p_points": 0.89,
+          "p_dnf": 0.09,
+          "p_optimal": 0.095,
+          "mean_race_time_s": 5105.52,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "1": 0.23,
+            "2": 0.2,
+            "3": 0.175,
+            "4": 0.105,
+            "5": 0.12,
+            "6": 0.03,
+            "7": 0.005,
+            "8": 0.005,
+            "9": 0.01,
+            "10": 0.01,
+            "11": 0.005,
+            "12": 0.005,
+            "14": 0.005,
+            "17": 0.005,
+            "19": 0.03,
+            "20": 0.025,
+            "21": 0.02,
+            "22": 0.015
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 3.5,
+          "expected_finish_all": 5.0,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            20.0
+          ],
+          "p_win": 0.12,
+          "p_podium": 0.525,
+          "p_points": 0.9,
+          "p_dnf": 0.09,
+          "p_optimal": 0.02,
+          "mean_race_time_s": 5106.54,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "1": 0.12,
+            "2": 0.21,
+            "3": 0.195,
+            "4": 0.14,
+            "5": 0.135,
+            "6": 0.055,
+            "7": 0.035,
+            "10": 0.01,
+            "13": 0.005,
+            "17": 0.005,
+            "19": 0.03,
+            "20": 0.025,
+            "21": 0.02,
+            "22": 0.015
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 3.75,
+          "expected_finish_all": 5.23,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            20.0
+          ],
+          "p_win": 0.145,
+          "p_podium": 0.525,
+          "p_points": 0.88,
+          "p_dnf": 0.09,
+          "p_optimal": 0.035,
+          "mean_race_time_s": 5115.0,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "1": 0.145,
+            "2": 0.21,
+            "3": 0.17,
+            "4": 0.125,
+            "5": 0.085,
+            "6": 0.065,
+            "7": 0.04,
+            "8": 0.025,
+            "9": 0.015,
+            "11": 0.01,
+            "12": 0.005,
+            "14": 0.005,
+            "16": 0.005,
+            "17": 0.005,
+            "19": 0.03,
+            "20": 0.025,
+            "21": 0.02,
+            "22": 0.015
+          }
+        }
+      ]
+    },
+    "LEC": {
+      "grid": 4,
+      "team": "Ferrari",
+      "base_pace_s": 92.088,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 3.65,
+          "expected_finish_all": 5.38,
+          "median_finish": 4.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.075,
+          "p_podium": 0.47,
+          "p_points": 0.895,
+          "p_dnf": 0.1,
+          "p_optimal": 0.275,
+          "mean_race_time_s": 5109.38,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "1": 0.075,
+            "2": 0.22,
+            "3": 0.175,
+            "4": 0.175,
+            "5": 0.1,
+            "6": 0.095,
+            "7": 0.04,
+            "8": 0.005,
+            "9": 0.005,
+            "10": 0.005,
+            "12": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.01,
+            "21": 0.035,
+            "22": 0.04
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 4.08,
+          "expected_finish_all": 5.76,
+          "median_finish": 4.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.06,
+          "p_podium": 0.385,
+          "p_points": 0.89,
+          "p_dnf": 0.1,
+          "p_optimal": 0.03,
+          "mean_race_time_s": 5119.2,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "1": 0.06,
+            "2": 0.115,
+            "3": 0.21,
+            "4": 0.18,
+            "5": 0.145,
+            "6": 0.1,
+            "7": 0.055,
+            "8": 0.02,
+            "10": 0.005,
+            "11": 0.01,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.01,
+            "21": 0.035,
+            "22": 0.04
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 3.44,
+          "expected_finish_all": 5.19,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.165,
+          "p_podium": 0.54,
+          "p_points": 0.88,
+          "p_dnf": 0.1,
+          "p_optimal": 0.085,
+          "mean_race_time_s": 5106.96,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "1": 0.165,
+            "2": 0.2,
+            "3": 0.175,
+            "4": 0.13,
+            "5": 0.105,
+            "6": 0.06,
+            "7": 0.02,
+            "8": 0.015,
+            "9": 0.005,
+            "10": 0.005,
+            "11": 0.005,
+            "12": 0.01,
+            "14": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.01,
+            "21": 0.035,
+            "22": 0.04
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 3.63,
+          "expected_finish_all": 5.36,
+          "median_finish": 3.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.17,
+          "p_podium": 0.535,
+          "p_points": 0.87,
+          "p_dnf": 0.1,
+          "p_optimal": 0.08,
+          "mean_race_time_s": 5114.65,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "1": 0.17,
+            "2": 0.165,
+            "3": 0.2,
+            "4": 0.15,
+            "5": 0.08,
+            "6": 0.04,
+            "7": 0.04,
+            "8": 0.015,
+            "9": 0.005,
+            "10": 0.005,
+            "12": 0.01,
+            "14": 0.005,
+            "15": 0.005,
+            "16": 0.005,
+            "17": 0.005,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.01,
+            "21": 0.035,
+            "22": 0.04
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 3.71,
+          "expected_finish_all": 5.43,
+          "median_finish": 4.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.135,
+          "p_podium": 0.45,
+          "p_points": 0.885,
+          "p_dnf": 0.1,
+          "p_optimal": 0.09,
+          "mean_race_time_s": 5110.51,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "1": 0.135,
+            "2": 0.175,
+            "3": 0.14,
+            "4": 0.15,
+            "5": 0.15,
+            "6": 0.09,
+            "7": 0.035,
+            "8": 0.005,
+            "9": 0.005,
+            "11": 0.005,
+            "13": 0.005,
+            "18": 0.01,
+            "19": 0.01,
+            "20": 0.01,
+            "21": 0.035,
+            "22": 0.04
+          }
+        }
+      ]
+    },
+    "VER": {
+      "grid": 5,
+      "team": "Red Bull Racing",
+      "base_pace_s": 92.212,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 4.73,
+          "expected_finish_all": 6.11,
+          "median_finish": 5.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.07,
+          "p_podium": 0.27,
+          "p_points": 0.91,
+          "p_dnf": 0.085,
+          "p_optimal": 0.265,
+          "mean_race_time_s": 5110.05,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "1": 0.07,
+            "2": 0.07,
+            "3": 0.13,
+            "4": 0.145,
+            "5": 0.135,
+            "6": 0.175,
+            "7": 0.14,
+            "8": 0.035,
+            "9": 0.01,
+            "15": 0.005,
+            "19": 0.005,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.025
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 5.11,
+          "expected_finish_all": 6.45,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            21.0
+          ],
+          "p_win": 0.015,
+          "p_podium": 0.2,
+          "p_points": 0.895,
+          "p_dnf": 0.085,
+          "p_optimal": 0.045,
+          "mean_race_time_s": 5117.67,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "1": 0.015,
+            "2": 0.075,
+            "3": 0.11,
+            "4": 0.17,
+            "5": 0.22,
+            "6": 0.135,
+            "7": 0.105,
+            "8": 0.02,
+            "9": 0.025,
+            "10": 0.02,
+            "12": 0.005,
+            "13": 0.005,
+            "14": 0.005,
+            "15": 0.005,
+            "19": 0.005,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.025
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 4.41,
+          "expected_finish_all": 5.81,
+          "median_finish": 4.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.06,
+          "p_podium": 0.305,
+          "p_points": 0.91,
+          "p_dnf": 0.085,
+          "p_optimal": 0.1,
+          "mean_race_time_s": 5108.46,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "1": 0.06,
+            "2": 0.105,
+            "3": 0.14,
+            "4": 0.205,
+            "5": 0.11,
+            "6": 0.165,
+            "7": 0.085,
+            "8": 0.03,
+            "9": 0.005,
+            "10": 0.005,
+            "11": 0.005,
+            "19": 0.005,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.025
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 4.76,
+          "expected_finish_all": 6.13,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            21.0
+          ],
+          "p_win": 0.015,
+          "p_podium": 0.31,
+          "p_points": 0.885,
+          "p_dnf": 0.085,
+          "p_optimal": 0.09,
+          "mean_race_time_s": 5115.89,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "1": 0.015,
+            "2": 0.15,
+            "3": 0.145,
+            "4": 0.165,
+            "5": 0.15,
+            "6": 0.12,
+            "7": 0.07,
+            "8": 0.035,
+            "9": 0.02,
+            "10": 0.015,
+            "11": 0.015,
+            "13": 0.005,
+            "14": 0.005,
+            "15": 0.005,
+            "19": 0.005,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.025
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 4.86,
+          "expected_finish_all": 6.22,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            21.0
+          ],
+          "p_win": 0.015,
+          "p_podium": 0.235,
+          "p_points": 0.89,
+          "p_dnf": 0.085,
+          "p_optimal": 0.06,
+          "mean_race_time_s": 5112.7,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "1": 0.015,
+            "2": 0.07,
+            "3": 0.15,
+            "4": 0.19,
+            "5": 0.16,
+            "6": 0.19,
+            "7": 0.1,
+            "8": 0.01,
+            "9": 0.005,
+            "11": 0.015,
+            "13": 0.005,
+            "18": 0.005,
+            "19": 0.005,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.025
+          }
+        }
+      ]
+    },
+    "PIA": {
+      "grid": 6,
+      "team": "McLaren",
+      "base_pace_s": 92.27,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 4.7,
+          "expected_finish_all": 6.0,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            21.0
+          ],
+          "p_win": 0.045,
+          "p_podium": 0.23,
+          "p_points": 0.915,
+          "p_dnf": 0.08,
+          "p_optimal": 0.235,
+          "mean_race_time_s": 5111.14,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "1": 0.045,
+            "2": 0.06,
+            "3": 0.125,
+            "4": 0.21,
+            "5": 0.19,
+            "6": 0.15,
+            "7": 0.085,
+            "8": 0.015,
+            "9": 0.035,
+            "13": 0.005,
+            "19": 0.015,
+            "20": 0.005,
+            "21": 0.025,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 4.33,
+          "expected_finish_all": 5.67,
+          "median_finish": 4.5,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.105,
+          "p_podium": 0.35,
+          "p_points": 0.905,
+          "p_dnf": 0.08,
+          "p_optimal": 0.135,
+          "mean_race_time_s": 5107.39,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "1": 0.105,
+            "2": 0.085,
+            "3": 0.16,
+            "4": 0.15,
+            "5": 0.16,
+            "6": 0.14,
+            "7": 0.06,
+            "8": 0.02,
+            "9": 0.015,
+            "10": 0.01,
+            "11": 0.01,
+            "13": 0.005,
+            "19": 0.015,
+            "20": 0.005,
+            "21": 0.025,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            36
+          ],
+          "stint_lengths": [
+            18,
+            18,
+            16
+          ],
+          "expected_finish": 5.24,
+          "expected_finish_all": 6.5,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            21.0
+          ],
+          "p_win": 0.02,
+          "p_podium": 0.175,
+          "p_points": 0.895,
+          "p_dnf": 0.08,
+          "p_optimal": 0.045,
+          "mean_race_time_s": 5118.03,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "1": 0.02,
+            "2": 0.04,
+            "3": 0.115,
+            "4": 0.16,
+            "5": 0.195,
+            "6": 0.185,
+            "7": 0.13,
+            "8": 0.02,
+            "9": 0.03,
+            "11": 0.005,
+            "12": 0.01,
+            "13": 0.005,
+            "15": 0.005,
+            "19": 0.015,
+            "20": 0.005,
+            "21": 0.025,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 4.59,
+          "expected_finish_all": 5.91,
+          "median_finish": 5.0,
+          "finish_ci": [
+            1.0,
+            21.0
+          ],
+          "p_win": 0.065,
+          "p_podium": 0.34,
+          "p_points": 0.89,
+          "p_dnf": 0.08,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5112.43,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "1": 0.065,
+            "2": 0.105,
+            "3": 0.17,
+            "4": 0.145,
+            "5": 0.155,
+            "6": 0.14,
+            "7": 0.075,
+            "8": 0.02,
+            "9": 0.015,
+            "11": 0.01,
+            "12": 0.005,
+            "13": 0.005,
+            "16": 0.005,
+            "19": 0.015,
+            "20": 0.005,
+            "21": 0.025,
+            "22": 0.04
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 5.03,
+          "expected_finish_all": 6.3,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            21.0
+          ],
+          "p_win": 0.035,
+          "p_podium": 0.26,
+          "p_points": 0.89,
+          "p_dnf": 0.08,
+          "p_optimal": 0.06,
+          "mean_race_time_s": 5112.91,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "1": 0.035,
+            "2": 0.075,
+            "3": 0.15,
+            "4": 0.13,
+            "5": 0.15,
+            "6": 0.21,
+            "7": 0.1,
+            "8": 0.02,
+            "9": 0.005,
+            "10": 0.015,
+            "11": 0.005,
+            "13": 0.01,
+            "14": 0.005,
+            "15": 0.01,
+            "19": 0.015,
+            "20": 0.005,
+            "21": 0.025,
+            "22": 0.035
+          }
+        }
+      ]
+    },
+    "NOR": {
+      "grid": 7,
+      "team": "McLaren",
+      "base_pace_s": 92.286,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 4.49,
+          "expected_finish_all": 5.86,
+          "median_finish": 4.0,
+          "finish_ci": [
+            2.0,
+            20.0
+          ],
+          "p_win": 0.05,
+          "p_podium": 0.37,
+          "p_points": 0.885,
+          "p_dnf": 0.085,
+          "p_optimal": 0.21,
+          "mean_race_time_s": 5112.8,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "1": 0.05,
+            "2": 0.13,
+            "3": 0.19,
+            "4": 0.15,
+            "5": 0.13,
+            "6": 0.115,
+            "7": 0.08,
+            "8": 0.035,
+            "9": 0.005,
+            "12": 0.015,
+            "13": 0.01,
+            "18": 0.02,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 5.05,
+          "expected_finish_all": 6.38,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            20.0
+          ],
+          "p_win": 0.02,
+          "p_podium": 0.27,
+          "p_points": 0.885,
+          "p_dnf": 0.085,
+          "p_optimal": 0.065,
+          "mean_race_time_s": 5120.27,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "1": 0.02,
+            "2": 0.095,
+            "3": 0.155,
+            "4": 0.13,
+            "5": 0.16,
+            "6": 0.155,
+            "7": 0.115,
+            "8": 0.015,
+            "9": 0.02,
+            "10": 0.02,
+            "12": 0.02,
+            "15": 0.005,
+            "16": 0.005,
+            "18": 0.015,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 4.46,
+          "expected_finish_all": 5.83,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            20.0
+          ],
+          "p_win": 0.03,
+          "p_podium": 0.325,
+          "p_points": 0.9,
+          "p_dnf": 0.085,
+          "p_optimal": 0.04,
+          "mean_race_time_s": 5112.56,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "1": 0.03,
+            "2": 0.095,
+            "3": 0.2,
+            "4": 0.16,
+            "5": 0.18,
+            "6": 0.12,
+            "7": 0.1,
+            "8": 0.01,
+            "9": 0.005,
+            "11": 0.005,
+            "12": 0.01,
+            "18": 0.015,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 4.42,
+          "expected_finish_all": 5.79,
+          "median_finish": 4.0,
+          "finish_ci": [
+            2.0,
+            20.0
+          ],
+          "p_win": 0.035,
+          "p_podium": 0.365,
+          "p_points": 0.9,
+          "p_dnf": 0.085,
+          "p_optimal": 0.09,
+          "mean_race_time_s": 5113.02,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "1": 0.035,
+            "2": 0.115,
+            "3": 0.215,
+            "4": 0.17,
+            "5": 0.14,
+            "6": 0.12,
+            "7": 0.075,
+            "8": 0.015,
+            "9": 0.01,
+            "10": 0.005,
+            "16": 0.01,
+            "17": 0.005,
+            "18": 0.015,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.03
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 5.18,
+          "expected_finish_all": 6.49,
+          "median_finish": 5.0,
+          "finish_ci": [
+            2.0,
+            20.0
+          ],
+          "p_win": 0.02,
+          "p_podium": 0.245,
+          "p_points": 0.85,
+          "p_dnf": 0.085,
+          "p_optimal": 0.045,
+          "mean_race_time_s": 5122.78,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "1": 0.02,
+            "2": 0.09,
+            "3": 0.135,
+            "4": 0.195,
+            "5": 0.175,
+            "6": 0.105,
+            "7": 0.08,
+            "8": 0.02,
+            "9": 0.02,
+            "10": 0.01,
+            "11": 0.01,
+            "12": 0.02,
+            "13": 0.015,
+            "15": 0.015,
+            "16": 0.005,
+            "18": 0.015,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.03
+          }
+        }
+      ]
+    },
+    "HAD": {
+      "grid": 8,
+      "team": "Red Bull Racing",
+      "base_pace_s": 92.72,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 7.69,
+          "expected_finish_all": 9.57,
+          "median_finish": 8.0,
+          "finish_ci": [
+            5.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.785,
+          "p_dnf": 0.145,
+          "p_optimal": 0.065,
+          "mean_race_time_s": 5146.87,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "2": 0.005,
+            "4": 0.015,
+            "5": 0.075,
+            "6": 0.145,
+            "7": 0.22,
+            "8": 0.205,
+            "9": 0.06,
+            "10": 0.06,
+            "11": 0.015,
+            "12": 0.02,
+            "13": 0.005,
+            "14": 0.01,
+            "15": 0.005,
+            "16": 0.005,
+            "17": 0.005,
+            "18": 0.02,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 7.82,
+          "expected_finish_all": 9.69,
+          "median_finish": 8.0,
+          "finish_ci": [
+            5.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.795,
+          "p_dnf": 0.145,
+          "p_optimal": 0.32,
+          "mean_race_time_s": 5147.27,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "4": 0.03,
+            "5": 0.055,
+            "6": 0.11,
+            "7": 0.19,
+            "8": 0.23,
+            "9": 0.11,
+            "10": 0.07,
+            "11": 0.02,
+            "13": 0.02,
+            "14": 0.005,
+            "15": 0.015,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 7.57,
+          "expected_finish_all": 9.47,
+          "median_finish": 8.0,
+          "finish_ci": [
+            5.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.805,
+          "p_dnf": 0.145,
+          "p_optimal": 0.05,
+          "mean_race_time_s": 5144.73,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "3": 0.005,
+            "4": 0.015,
+            "5": 0.06,
+            "6": 0.15,
+            "7": 0.215,
+            "8": 0.235,
+            "9": 0.105,
+            "10": 0.02,
+            "11": 0.005,
+            "12": 0.01,
+            "13": 0.01,
+            "14": 0.015,
+            "15": 0.005,
+            "16": 0.005,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 7.57,
+          "expected_finish_all": 9.47,
+          "median_finish": 7.0,
+          "finish_ci": [
+            5.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.795,
+          "p_dnf": 0.145,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5146.62,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "2": 0.005,
+            "4": 0.03,
+            "5": 0.06,
+            "6": 0.15,
+            "7": 0.27,
+            "8": 0.19,
+            "9": 0.07,
+            "10": 0.02,
+            "11": 0.02,
+            "15": 0.005,
+            "16": 0.02,
+            "18": 0.02,
+            "19": 0.015,
+            "20": 0.035,
+            "21": 0.035,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 7.66,
+          "expected_finish_all": 9.55,
+          "median_finish": 8.0,
+          "finish_ci": [
+            5.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.015,
+          "p_points": 0.775,
+          "p_dnf": 0.145,
+          "p_optimal": 0.035,
+          "mean_race_time_s": 5146.89,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "2": 0.01,
+            "3": 0.005,
+            "4": 0.015,
+            "5": 0.1,
+            "6": 0.095,
+            "7": 0.21,
+            "8": 0.215,
+            "9": 0.105,
+            "10": 0.02,
+            "11": 0.025,
+            "12": 0.01,
+            "13": 0.02,
+            "14": 0.005,
+            "15": 0.005,
+            "16": 0.005,
+            "17": 0.01,
+            "18": 0.015,
+            "19": 0.01,
+            "20": 0.035,
+            "21": 0.03,
+            "22": 0.055
+          }
+        }
+      ]
+    },
+    "GAS": {
+      "grid": 9,
+      "team": "Alpine",
+      "base_pace_s": 93.233,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 9.28,
+          "expected_finish_all": 10.44,
+          "median_finish": 9.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.705,
+          "p_dnf": 0.1,
+          "p_optimal": 0.035,
+          "mean_race_time_s": 5157.76,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "3": 0.005,
+            "4": 0.015,
+            "5": 0.02,
+            "6": 0.04,
+            "7": 0.065,
+            "8": 0.18,
+            "9": 0.185,
+            "10": 0.195,
+            "11": 0.08,
+            "12": 0.05,
+            "13": 0.005,
+            "14": 0.03,
+            "15": 0.015,
+            "16": 0.015,
+            "17": 0.005,
+            "19": 0.01,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 9.09,
+          "expected_finish_all": 10.27,
+          "median_finish": 9.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.68,
+          "p_dnf": 0.1,
+          "p_optimal": 0.315,
+          "mean_race_time_s": 5154.51,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "4": 0.015,
+            "5": 0.015,
+            "6": 0.07,
+            "7": 0.13,
+            "8": 0.17,
+            "9": 0.155,
+            "10": 0.125,
+            "11": 0.09,
+            "12": 0.05,
+            "13": 0.035,
+            "14": 0.035,
+            "17": 0.01,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 9.13,
+          "expected_finish_all": 10.3,
+          "median_finish": 9.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.7,
+          "p_dnf": 0.1,
+          "p_optimal": 0.075,
+          "mean_race_time_s": 5153.36,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "3": 0.005,
+            "4": 0.005,
+            "5": 0.035,
+            "6": 0.045,
+            "7": 0.125,
+            "8": 0.155,
+            "9": 0.2,
+            "10": 0.13,
+            "11": 0.09,
+            "12": 0.04,
+            "13": 0.015,
+            "14": 0.015,
+            "15": 0.025,
+            "17": 0.01,
+            "18": 0.005,
+            "19": 0.015,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 9.23,
+          "expected_finish_all": 10.39,
+          "median_finish": 9.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.685,
+          "p_dnf": 0.1,
+          "p_optimal": 0.065,
+          "mean_race_time_s": 5154.97,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "5": 0.03,
+            "6": 0.06,
+            "7": 0.115,
+            "8": 0.155,
+            "9": 0.185,
+            "10": 0.14,
+            "11": 0.095,
+            "12": 0.035,
+            "13": 0.01,
+            "14": 0.045,
+            "15": 0.02,
+            "16": 0.005,
+            "17": 0.01,
+            "19": 0.01,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 9.19,
+          "expected_finish_all": 10.36,
+          "median_finish": 9.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.655,
+          "p_dnf": 0.1,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5156.02,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "4": 0.02,
+            "5": 0.03,
+            "6": 0.05,
+            "7": 0.13,
+            "8": 0.15,
+            "9": 0.165,
+            "10": 0.11,
+            "11": 0.1,
+            "12": 0.055,
+            "13": 0.04,
+            "14": 0.02,
+            "15": 0.01,
+            "16": 0.01,
+            "17": 0.01,
+            "18": 0.005,
+            "19": 0.01,
+            "20": 0.02,
+            "21": 0.02,
+            "22": 0.045
+          }
+        }
+      ]
+    },
+    "LAW": {
+      "grid": 10,
+      "team": "Racing Bulls",
+      "base_pace_s": 93.293,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 9.59,
+          "expected_finish_all": 10.84,
+          "median_finish": 10.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.61,
+          "p_dnf": 0.11,
+          "p_optimal": 0.14,
+          "mean_race_time_s": 5156.69,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "3": 0.005,
+            "5": 0.025,
+            "6": 0.055,
+            "7": 0.105,
+            "8": 0.115,
+            "9": 0.18,
+            "10": 0.125,
+            "11": 0.115,
+            "12": 0.035,
+            "13": 0.04,
+            "14": 0.045,
+            "15": 0.03,
+            "16": 0.005,
+            "17": 0.005,
+            "18": 0.005,
+            "19": 0.005,
+            "20": 0.03,
+            "21": 0.04,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 9.48,
+          "expected_finish_all": 10.74,
+          "median_finish": 9.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.64,
+          "p_dnf": 0.11,
+          "p_optimal": 0.06,
+          "mean_race_time_s": 5156.68,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "3": 0.005,
+            "5": 0.025,
+            "6": 0.035,
+            "7": 0.095,
+            "8": 0.185,
+            "9": 0.17,
+            "10": 0.125,
+            "11": 0.075,
+            "12": 0.075,
+            "13": 0.045,
+            "14": 0.01,
+            "15": 0.015,
+            "16": 0.02,
+            "17": 0.01,
+            "19": 0.005,
+            "20": 0.03,
+            "21": 0.04,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 10.18,
+          "expected_finish_all": 11.37,
+          "median_finish": 10.0,
+          "finish_ci": [
+            7.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.565,
+          "p_dnf": 0.11,
+          "p_optimal": 0.02,
+          "mean_race_time_s": 5161.47,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.04,
+            "7": 0.09,
+            "8": 0.1,
+            "9": 0.185,
+            "10": 0.145,
+            "11": 0.09,
+            "12": 0.065,
+            "13": 0.07,
+            "14": 0.04,
+            "15": 0.02,
+            "16": 0.005,
+            "17": 0.01,
+            "18": 0.02,
+            "19": 0.005,
+            "20": 0.035,
+            "21": 0.04,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 9.76,
+          "expected_finish_all": 10.99,
+          "median_finish": 10.0,
+          "finish_ci": [
+            5.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.575,
+          "p_dnf": 0.11,
+          "p_optimal": 0.08,
+          "mean_race_time_s": 5158.11,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "3": 0.005,
+            "4": 0.015,
+            "5": 0.035,
+            "6": 0.05,
+            "7": 0.085,
+            "8": 0.11,
+            "9": 0.14,
+            "10": 0.135,
+            "11": 0.085,
+            "12": 0.07,
+            "13": 0.06,
+            "14": 0.035,
+            "15": 0.035,
+            "16": 0.025,
+            "17": 0.005,
+            "19": 0.005,
+            "20": 0.03,
+            "21": 0.04,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 9.72,
+          "expected_finish_all": 10.96,
+          "median_finish": 10.0,
+          "finish_ci": [
+            6.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.015,
+          "p_points": 0.575,
+          "p_dnf": 0.11,
+          "p_optimal": 0.06,
+          "mean_race_time_s": 5159.81,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "3": 0.015,
+            "5": 0.015,
+            "6": 0.025,
+            "7": 0.125,
+            "8": 0.12,
+            "9": 0.15,
+            "10": 0.125,
+            "11": 0.125,
+            "12": 0.065,
+            "13": 0.06,
+            "14": 0.02,
+            "15": 0.01,
+            "16": 0.02,
+            "17": 0.005,
+            "18": 0.01,
+            "19": 0.005,
+            "20": 0.03,
+            "21": 0.04,
+            "22": 0.035
+          }
+        }
+      ]
+    },
+    "LIN": {
+      "grid": 11,
+      "team": "Racing Bulls",
+      "base_pace_s": 93.311,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 8.42,
+          "expected_finish_all": 9.88,
+          "median_finish": 8.0,
+          "finish_ci": [
+            5.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.01,
+          "p_points": 0.735,
+          "p_dnf": 0.115,
+          "p_optimal": 0.155,
+          "mean_race_time_s": 5147.81,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "3": 0.01,
+            "4": 0.02,
+            "5": 0.04,
+            "6": 0.11,
+            "7": 0.14,
+            "8": 0.195,
+            "9": 0.155,
+            "10": 0.065,
+            "11": 0.05,
+            "12": 0.04,
+            "13": 0.02,
+            "14": 0.015,
+            "15": 0.01,
+            "16": 0.01,
+            "17": 0.005,
+            "19": 0.01,
+            "20": 0.02,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 8.68,
+          "expected_finish_all": 10.12,
+          "median_finish": 8.0,
+          "finish_ci": [
+            6.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.71,
+          "p_dnf": 0.115,
+          "p_optimal": 0.075,
+          "mean_race_time_s": 5149.44,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "4": 0.02,
+            "5": 0.03,
+            "6": 0.07,
+            "7": 0.195,
+            "8": 0.23,
+            "9": 0.095,
+            "10": 0.07,
+            "11": 0.075,
+            "12": 0.005,
+            "13": 0.035,
+            "14": 0.025,
+            "16": 0.01,
+            "17": 0.025,
+            "19": 0.01,
+            "20": 0.02,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 9.23,
+          "expected_finish_all": 10.6,
+          "median_finish": 9.0,
+          "finish_ci": [
+            6.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.005,
+          "p_points": 0.645,
+          "p_dnf": 0.115,
+          "p_optimal": 0.185,
+          "mean_race_time_s": 5156.07,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "3": 0.005,
+            "4": 0.01,
+            "5": 0.035,
+            "6": 0.04,
+            "7": 0.135,
+            "8": 0.17,
+            "9": 0.17,
+            "10": 0.08,
+            "11": 0.085,
+            "12": 0.06,
+            "13": 0.03,
+            "14": 0.025,
+            "15": 0.01,
+            "16": 0.005,
+            "17": 0.015,
+            "18": 0.005,
+            "19": 0.015,
+            "20": 0.02,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 10.19,
+          "expected_finish_all": 11.45,
+          "median_finish": 10.0,
+          "finish_ci": [
+            6.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.52,
+          "p_dnf": 0.115,
+          "p_optimal": 0.025,
+          "mean_race_time_s": 5160.23,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.05,
+            "7": 0.08,
+            "8": 0.105,
+            "9": 0.165,
+            "10": 0.115,
+            "11": 0.13,
+            "12": 0.07,
+            "13": 0.065,
+            "14": 0.04,
+            "15": 0.025,
+            "16": 0.005,
+            "17": 0.02,
+            "18": 0.005,
+            "19": 0.015,
+            "20": 0.02,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 10.1,
+          "expected_finish_all": 11.37,
+          "median_finish": 10.0,
+          "finish_ci": [
+            6.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.52,
+          "p_dnf": 0.115,
+          "p_optimal": 0.035,
+          "mean_race_time_s": 5158.31,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "5": 0.02,
+            "6": 0.045,
+            "7": 0.06,
+            "8": 0.115,
+            "9": 0.16,
+            "10": 0.12,
+            "11": 0.105,
+            "12": 0.125,
+            "13": 0.045,
+            "14": 0.045,
+            "15": 0.02,
+            "16": 0.01,
+            "17": 0.015,
+            "19": 0.01,
+            "20": 0.02,
+            "21": 0.03,
+            "22": 0.055
+          }
+        }
+      ]
+    },
+    "HUL": {
+      "grid": 12,
+      "team": "Audi",
+      "base_pace_s": 93.385,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 11.08,
+          "expected_finish_all": 12.21,
+          "median_finish": 11.0,
+          "finish_ci": [
+            7.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.395,
+          "p_dnf": 0.12,
+          "p_optimal": 0.085,
+          "mean_race_time_s": 5159.51,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "6": 0.02,
+            "7": 0.045,
+            "8": 0.08,
+            "9": 0.12,
+            "10": 0.13,
+            "11": 0.135,
+            "12": 0.1,
+            "13": 0.095,
+            "14": 0.045,
+            "15": 0.055,
+            "16": 0.035,
+            "17": 0.015,
+            "18": 0.015,
+            "19": 0.015,
+            "20": 0.025,
+            "21": 0.025,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 11.09,
+          "expected_finish_all": 12.22,
+          "median_finish": 11.0,
+          "finish_ci": [
+            7.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.365,
+          "p_dnf": 0.12,
+          "p_optimal": 0.085,
+          "mean_race_time_s": 5159.11,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.02,
+            "7": 0.05,
+            "8": 0.085,
+            "9": 0.105,
+            "10": 0.1,
+            "11": 0.14,
+            "12": 0.12,
+            "13": 0.095,
+            "14": 0.06,
+            "15": 0.05,
+            "16": 0.03,
+            "17": 0.01,
+            "18": 0.025,
+            "19": 0.015,
+            "20": 0.02,
+            "21": 0.025,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 11.29,
+          "expected_finish_all": 12.4,
+          "median_finish": 11.0,
+          "finish_ci": [
+            7.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.345,
+          "p_dnf": 0.12,
+          "p_optimal": 0.115,
+          "mean_race_time_s": 5157.79,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "4": 0.01,
+            "5": 0.015,
+            "6": 0.01,
+            "7": 0.05,
+            "8": 0.055,
+            "9": 0.085,
+            "10": 0.12,
+            "11": 0.16,
+            "12": 0.065,
+            "13": 0.1,
+            "14": 0.08,
+            "15": 0.055,
+            "16": 0.055,
+            "17": 0.025,
+            "18": 0.01,
+            "19": 0.015,
+            "20": 0.02,
+            "21": 0.025,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 11.62,
+          "expected_finish_all": 12.7,
+          "median_finish": 12.0,
+          "finish_ci": [
+            7.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.285,
+          "p_dnf": 0.12,
+          "p_optimal": 0.1,
+          "mean_race_time_s": 5159.71,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "4": 0.01,
+            "5": 0.01,
+            "6": 0.01,
+            "7": 0.05,
+            "8": 0.05,
+            "9": 0.09,
+            "10": 0.065,
+            "11": 0.15,
+            "12": 0.12,
+            "13": 0.055,
+            "14": 0.135,
+            "15": 0.05,
+            "16": 0.045,
+            "17": 0.025,
+            "18": 0.025,
+            "19": 0.02,
+            "20": 0.02,
+            "21": 0.025,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 11.4,
+          "expected_finish_all": 12.5,
+          "median_finish": 12.0,
+          "finish_ci": [
+            7.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.34,
+          "p_dnf": 0.12,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5158.7,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.035,
+            "7": 0.05,
+            "8": 0.085,
+            "9": 0.06,
+            "10": 0.105,
+            "11": 0.125,
+            "12": 0.1,
+            "13": 0.07,
+            "14": 0.095,
+            "15": 0.075,
+            "16": 0.04,
+            "17": 0.035,
+            "18": 0.015,
+            "19": 0.015,
+            "20": 0.02,
+            "21": 0.025,
+            "22": 0.045
+          }
+        }
+      ]
+    },
+    "BOR": {
+      "grid": 13,
+      "team": "Audi",
+      "base_pace_s": 93.598,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 12.13,
+          "expected_finish_all": 12.81,
+          "median_finish": 12.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.275,
+          "p_dnf": 0.075,
+          "p_optimal": 0.225,
+          "mean_race_time_s": 5172.82,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "4": 0.005,
+            "5": 0.01,
+            "6": 0.015,
+            "7": 0.005,
+            "8": 0.05,
+            "9": 0.07,
+            "10": 0.12,
+            "11": 0.125,
+            "12": 0.125,
+            "13": 0.07,
+            "14": 0.13,
+            "15": 0.08,
+            "16": 0.06,
+            "17": 0.05,
+            "18": 0.01,
+            "19": 0.01,
+            "21": 0.03,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 12.54,
+          "expected_finish_all": 13.19,
+          "median_finish": 13.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.255,
+          "p_dnf": 0.075,
+          "p_optimal": 0.065,
+          "mean_race_time_s": 5176.39,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "6": 0.01,
+            "7": 0.025,
+            "8": 0.035,
+            "9": 0.06,
+            "10": 0.125,
+            "11": 0.12,
+            "12": 0.07,
+            "13": 0.12,
+            "14": 0.1,
+            "15": 0.115,
+            "16": 0.075,
+            "17": 0.035,
+            "18": 0.02,
+            "19": 0.02,
+            "20": 0.005,
+            "21": 0.03,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 12.16,
+          "expected_finish_all": 12.84,
+          "median_finish": 12.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.27,
+          "p_dnf": 0.075,
+          "p_optimal": 0.11,
+          "mean_race_time_s": 5172.58,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "6": 0.015,
+            "7": 0.035,
+            "8": 0.04,
+            "9": 0.095,
+            "10": 0.085,
+            "11": 0.105,
+            "12": 0.14,
+            "13": 0.105,
+            "14": 0.1,
+            "15": 0.08,
+            "16": 0.065,
+            "17": 0.04,
+            "18": 0.01,
+            "19": 0.02,
+            "21": 0.03,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 12.03,
+          "expected_finish_all": 12.72,
+          "median_finish": 12.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.3,
+          "p_dnf": 0.075,
+          "p_optimal": 0.085,
+          "mean_race_time_s": 5171.75,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "4": 0.005,
+            "6": 0.025,
+            "7": 0.02,
+            "8": 0.035,
+            "9": 0.095,
+            "10": 0.12,
+            "11": 0.105,
+            "12": 0.115,
+            "13": 0.115,
+            "14": 0.095,
+            "15": 0.085,
+            "16": 0.045,
+            "17": 0.04,
+            "18": 0.025,
+            "19": 0.01,
+            "21": 0.03,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 12.41,
+          "expected_finish_all": 13.07,
+          "median_finish": 13.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.25,
+          "p_dnf": 0.075,
+          "p_optimal": 0.04,
+          "mean_race_time_s": 5178.09,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.005,
+            "7": 0.015,
+            "8": 0.04,
+            "9": 0.075,
+            "10": 0.11,
+            "11": 0.075,
+            "12": 0.145,
+            "13": 0.17,
+            "14": 0.08,
+            "15": 0.075,
+            "16": 0.055,
+            "17": 0.04,
+            "18": 0.02,
+            "19": 0.025,
+            "21": 0.03,
+            "22": 0.035
+          }
+        }
+      ]
+    },
+    "COL": {
+      "grid": 14,
+      "team": "Alpine",
+      "base_pace_s": 93.68,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 12.15,
+          "expected_finish_all": 13.02,
+          "median_finish": 12.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.26,
+          "p_dnf": 0.1,
+          "p_optimal": 0.05,
+          "mean_race_time_s": 5169.98,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "6": 0.005,
+            "7": 0.025,
+            "8": 0.035,
+            "9": 0.065,
+            "10": 0.13,
+            "11": 0.135,
+            "12": 0.13,
+            "13": 0.1,
+            "14": 0.095,
+            "15": 0.065,
+            "16": 0.045,
+            "17": 0.065,
+            "18": 0.01,
+            "19": 0.005,
+            "20": 0.03,
+            "21": 0.025,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 12.0,
+          "expected_finish_all": 12.88,
+          "median_finish": 12.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.27,
+          "p_dnf": 0.1,
+          "p_optimal": 0.28,
+          "mean_race_time_s": 5168.42,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "5": 0.01,
+            "7": 0.02,
+            "8": 0.035,
+            "9": 0.07,
+            "10": 0.135,
+            "11": 0.13,
+            "12": 0.13,
+            "13": 0.11,
+            "14": 0.13,
+            "15": 0.04,
+            "16": 0.055,
+            "17": 0.01,
+            "18": 0.025,
+            "19": 0.005,
+            "20": 0.035,
+            "21": 0.025,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 11.83,
+          "expected_finish_all": 12.73,
+          "median_finish": 12.0,
+          "finish_ci": [
+            7.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.3,
+          "p_dnf": 0.1,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5167.29,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.02,
+            "7": 0.035,
+            "8": 0.04,
+            "9": 0.095,
+            "10": 0.105,
+            "11": 0.15,
+            "12": 0.12,
+            "13": 0.065,
+            "14": 0.09,
+            "15": 0.065,
+            "16": 0.05,
+            "17": 0.04,
+            "18": 0.01,
+            "19": 0.015,
+            "20": 0.03,
+            "21": 0.03,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 11.96,
+          "expected_finish_all": 12.84,
+          "median_finish": 12.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.29,
+          "p_dnf": 0.1,
+          "p_optimal": 0.08,
+          "mean_race_time_s": 5168.88,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.005,
+            "7": 0.035,
+            "8": 0.025,
+            "9": 0.075,
+            "10": 0.145,
+            "11": 0.135,
+            "12": 0.13,
+            "13": 0.105,
+            "14": 0.085,
+            "15": 0.06,
+            "16": 0.035,
+            "17": 0.03,
+            "18": 0.02,
+            "19": 0.015,
+            "20": 0.03,
+            "21": 0.03,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 11.84,
+          "expected_finish_all": 12.74,
+          "median_finish": 12.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.3,
+          "p_dnf": 0.1,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5166.72,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.01,
+            "7": 0.005,
+            "8": 0.06,
+            "9": 0.09,
+            "10": 0.13,
+            "11": 0.15,
+            "12": 0.115,
+            "13": 0.09,
+            "14": 0.08,
+            "15": 0.085,
+            "16": 0.035,
+            "17": 0.03,
+            "18": 0.005,
+            "19": 0.02,
+            "20": 0.03,
+            "21": 0.025,
+            "22": 0.035
+          }
+        }
+      ]
+    },
+    "OCO": {
+      "grid": 15,
+      "team": "Haas F1 Team",
+      "base_pace_s": 93.783,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 12.14,
+          "expected_finish_all": 13.24,
+          "median_finish": 13.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.23,
+          "p_dnf": 0.13,
+          "p_optimal": 0.085,
+          "mean_race_time_s": 5169.41,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "6": 0.01,
+            "7": 0.025,
+            "8": 0.04,
+            "9": 0.08,
+            "10": 0.075,
+            "11": 0.105,
+            "12": 0.16,
+            "13": 0.13,
+            "14": 0.065,
+            "15": 0.075,
+            "16": 0.06,
+            "17": 0.045,
+            "18": 0.01,
+            "19": 0.005,
+            "20": 0.04,
+            "21": 0.03,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 12.12,
+          "expected_finish_all": 13.22,
+          "median_finish": 13.0,
+          "finish_ci": [
+            8.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.24,
+          "p_dnf": 0.13,
+          "p_optimal": 0.13,
+          "mean_race_time_s": 5166.84,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "4": 0.005,
+            "5": 0.005,
+            "6": 0.015,
+            "7": 0.015,
+            "8": 0.07,
+            "9": 0.075,
+            "10": 0.055,
+            "11": 0.14,
+            "12": 0.09,
+            "13": 0.09,
+            "14": 0.11,
+            "15": 0.085,
+            "16": 0.065,
+            "17": 0.045,
+            "18": 0.01,
+            "19": 0.01,
+            "20": 0.04,
+            "21": 0.03,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 13.59,
+          "expected_finish_all": 14.5,
+          "median_finish": 14.0,
+          "finish_ci": [
+            10.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.11,
+          "p_dnf": 0.13,
+          "p_optimal": 0.035,
+          "mean_race_time_s": 5176.98,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "6": 0.005,
+            "7": 0.01,
+            "8": 0.015,
+            "9": 0.015,
+            "10": 0.065,
+            "11": 0.085,
+            "12": 0.08,
+            "13": 0.13,
+            "14": 0.1,
+            "15": 0.16,
+            "16": 0.115,
+            "17": 0.045,
+            "18": 0.055,
+            "19": 0.005,
+            "20": 0.04,
+            "21": 0.03,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 13.51,
+          "expected_finish_all": 14.44,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.165,
+          "p_dnf": 0.13,
+          "p_optimal": 0.205,
+          "mean_race_time_s": 5173.08,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "6": 0.005,
+            "7": 0.025,
+            "8": 0.015,
+            "9": 0.045,
+            "10": 0.075,
+            "11": 0.045,
+            "12": 0.075,
+            "13": 0.095,
+            "14": 0.13,
+            "15": 0.13,
+            "16": 0.105,
+            "17": 0.08,
+            "18": 0.045,
+            "19": 0.015,
+            "20": 0.04,
+            "21": 0.03,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 13.67,
+          "expected_finish_all": 14.57,
+          "median_finish": 15.0,
+          "finish_ci": [
+            9.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.155,
+          "p_dnf": 0.13,
+          "p_optimal": 0.03,
+          "mean_race_time_s": 5176.12,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "7": 0.005,
+            "8": 0.02,
+            "9": 0.065,
+            "10": 0.065,
+            "11": 0.07,
+            "12": 0.06,
+            "13": 0.08,
+            "14": 0.125,
+            "15": 0.12,
+            "16": 0.115,
+            "17": 0.105,
+            "18": 0.03,
+            "19": 0.025,
+            "20": 0.04,
+            "21": 0.03,
+            "22": 0.045
+          }
+        }
+      ]
+    },
+    "BEA": {
+      "grid": 16,
+      "team": "Haas F1 Team",
+      "base_pace_s": 93.84,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 13.39,
+          "expected_finish_all": 14.4,
+          "median_finish": 14.0,
+          "finish_ci": [
+            10.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.09,
+          "p_dnf": 0.13,
+          "p_optimal": 0.08,
+          "mean_race_time_s": 5186.37,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "7": 0.01,
+            "8": 0.015,
+            "9": 0.025,
+            "10": 0.04,
+            "11": 0.095,
+            "12": 0.155,
+            "13": 0.145,
+            "14": 0.095,
+            "15": 0.095,
+            "16": 0.08,
+            "17": 0.07,
+            "18": 0.035,
+            "19": 0.02,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.065
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 12.76,
+          "expected_finish_all": 13.85,
+          "median_finish": 13.0,
+          "finish_ci": [
+            8.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.18,
+          "p_dnf": 0.13,
+          "p_optimal": 0.05,
+          "mean_race_time_s": 5183.13,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "6": 0.01,
+            "7": 0.005,
+            "8": 0.04,
+            "9": 0.065,
+            "10": 0.06,
+            "11": 0.105,
+            "12": 0.125,
+            "13": 0.11,
+            "14": 0.12,
+            "15": 0.085,
+            "16": 0.06,
+            "17": 0.045,
+            "18": 0.025,
+            "19": 0.025,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.065
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 13.44,
+          "expected_finish_all": 14.44,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.095,
+          "p_dnf": 0.13,
+          "p_optimal": 0.21,
+          "mean_race_time_s": 5181.82,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "6": 0.01,
+            "8": 0.025,
+            "9": 0.04,
+            "10": 0.02,
+            "11": 0.12,
+            "12": 0.1,
+            "13": 0.11,
+            "14": 0.1,
+            "15": 0.15,
+            "16": 0.085,
+            "17": 0.07,
+            "18": 0.04,
+            "19": 0.01,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.065
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 13.33,
+          "expected_finish_all": 14.35,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.155,
+          "p_dnf": 0.13,
+          "p_optimal": 0.11,
+          "mean_race_time_s": 5182.99,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "7": 0.02,
+            "8": 0.02,
+            "9": 0.055,
+            "10": 0.06,
+            "11": 0.105,
+            "12": 0.085,
+            "13": 0.11,
+            "14": 0.05,
+            "15": 0.125,
+            "16": 0.1,
+            "17": 0.1,
+            "18": 0.04,
+            "19": 0.01,
+            "20": 0.025,
+            "21": 0.03,
+            "22": 0.065
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 13.13,
+          "expected_finish_all": 14.17,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.17,
+          "p_dnf": 0.13,
+          "p_optimal": 0.065,
+          "mean_race_time_s": 5181.14,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "6": 0.005,
+            "7": 0.015,
+            "8": 0.015,
+            "9": 0.065,
+            "10": 0.07,
+            "11": 0.085,
+            "12": 0.085,
+            "13": 0.125,
+            "14": 0.095,
+            "15": 0.14,
+            "16": 0.08,
+            "17": 0.055,
+            "18": 0.015,
+            "19": 0.025,
+            "20": 0.03,
+            "21": 0.03,
+            "22": 0.065
+          }
+        }
+      ]
+    },
+    "SAI": {
+      "grid": 17,
+      "team": "Williams",
+      "base_pace_s": 93.923,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 13.06,
+          "expected_finish_all": 14.04,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.135,
+          "p_dnf": 0.125,
+          "p_optimal": 0.115,
+          "mean_race_time_s": 5173.01,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "7": 0.015,
+            "8": 0.02,
+            "9": 0.04,
+            "10": 0.06,
+            "11": 0.105,
+            "12": 0.13,
+            "13": 0.1,
+            "14": 0.1,
+            "15": 0.15,
+            "16": 0.115,
+            "17": 0.03,
+            "18": 0.015,
+            "19": 0.005,
+            "20": 0.03,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 13.65,
+          "expected_finish_all": 14.56,
+          "median_finish": 14.0,
+          "finish_ci": [
+            10.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.105,
+          "p_dnf": 0.125,
+          "p_optimal": 0.055,
+          "mean_race_time_s": 5180.83,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "7": 0.005,
+            "8": 0.01,
+            "9": 0.03,
+            "10": 0.06,
+            "11": 0.055,
+            "12": 0.085,
+            "13": 0.15,
+            "14": 0.125,
+            "15": 0.17,
+            "16": 0.095,
+            "17": 0.075,
+            "18": 0.005,
+            "19": 0.02,
+            "20": 0.03,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 12.86,
+          "expected_finish_all": 13.88,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.18,
+          "p_dnf": 0.125,
+          "p_optimal": 0.055,
+          "mean_race_time_s": 5172.95,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.005,
+            "7": 0.02,
+            "8": 0.02,
+            "9": 0.06,
+            "10": 0.07,
+            "11": 0.1,
+            "12": 0.075,
+            "13": 0.125,
+            "14": 0.125,
+            "15": 0.09,
+            "16": 0.145,
+            "17": 0.03,
+            "19": 0.015,
+            "20": 0.03,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 13.18,
+          "expected_finish_all": 14.15,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.145,
+          "p_dnf": 0.125,
+          "p_optimal": 0.055,
+          "mean_race_time_s": 5174.36,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "7": 0.025,
+            "8": 0.02,
+            "9": 0.03,
+            "10": 0.07,
+            "11": 0.075,
+            "12": 0.105,
+            "13": 0.115,
+            "14": 0.13,
+            "15": 0.15,
+            "16": 0.085,
+            "17": 0.055,
+            "18": 0.01,
+            "19": 0.015,
+            "20": 0.03,
+            "21": 0.03,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 13.3,
+          "expected_finish_all": 14.26,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.105,
+          "p_dnf": 0.125,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5179.53,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "7": 0.01,
+            "8": 0.025,
+            "9": 0.045,
+            "10": 0.025,
+            "11": 0.095,
+            "12": 0.12,
+            "13": 0.155,
+            "14": 0.125,
+            "15": 0.105,
+            "16": 0.07,
+            "17": 0.065,
+            "18": 0.03,
+            "19": 0.005,
+            "20": 0.035,
+            "21": 0.03,
+            "22": 0.06
+          }
+        }
+      ]
+    },
+    "ALB": {
+      "grid": 18,
+      "team": "Williams",
+      "base_pace_s": 93.978,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 13.81,
+          "expected_finish_all": 14.73,
+          "median_finish": 14.0,
+          "finish_ci": [
+            9.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.08,
+          "p_dnf": 0.135,
+          "p_optimal": 0.09,
+          "mean_race_time_s": 5177.29,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "8": 0.015,
+            "9": 0.04,
+            "10": 0.025,
+            "11": 0.07,
+            "12": 0.075,
+            "13": 0.155,
+            "14": 0.135,
+            "15": 0.12,
+            "16": 0.12,
+            "17": 0.075,
+            "18": 0.035,
+            "19": 0.025,
+            "20": 0.035,
+            "21": 0.02,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 13.43,
+          "expected_finish_all": 14.41,
+          "median_finish": 14.0,
+          "finish_ci": [
+            10.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.095,
+          "p_dnf": 0.135,
+          "p_optimal": 0.13,
+          "mean_race_time_s": 5172.86,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "6": 0.005,
+            "8": 0.015,
+            "9": 0.025,
+            "10": 0.05,
+            "11": 0.13,
+            "12": 0.09,
+            "13": 0.11,
+            "14": 0.135,
+            "15": 0.12,
+            "16": 0.075,
+            "17": 0.075,
+            "18": 0.035,
+            "19": 0.03,
+            "20": 0.03,
+            "21": 0.02,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 14.19,
+          "expected_finish_all": 15.06,
+          "median_finish": 15.0,
+          "finish_ci": [
+            10.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.055,
+          "p_dnf": 0.135,
+          "p_optimal": 0.2,
+          "mean_race_time_s": 5177.56,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "6": 0.005,
+            "7": 0.005,
+            "8": 0.015,
+            "9": 0.005,
+            "10": 0.025,
+            "11": 0.075,
+            "12": 0.065,
+            "13": 0.095,
+            "14": 0.14,
+            "15": 0.15,
+            "16": 0.135,
+            "17": 0.12,
+            "18": 0.035,
+            "19": 0.025,
+            "20": 0.03,
+            "21": 0.02,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 14.01,
+          "expected_finish_all": 14.91,
+          "median_finish": 15.0,
+          "finish_ci": [
+            10.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.085,
+          "p_dnf": 0.135,
+          "p_optimal": 0.08,
+          "mean_race_time_s": 5178.63,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "5": 0.005,
+            "6": 0.01,
+            "7": 0.01,
+            "8": 0.005,
+            "9": 0.015,
+            "10": 0.04,
+            "11": 0.045,
+            "12": 0.11,
+            "13": 0.105,
+            "14": 0.125,
+            "15": 0.115,
+            "16": 0.125,
+            "17": 0.09,
+            "18": 0.055,
+            "19": 0.025,
+            "20": 0.045,
+            "21": 0.02,
+            "22": 0.055
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 14.25,
+          "expected_finish_all": 15.12,
+          "median_finish": 15.0,
+          "finish_ci": [
+            10.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.055,
+          "p_dnf": 0.135,
+          "p_optimal": 0.04,
+          "mean_race_time_s": 5179.34,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "7": 0.005,
+            "9": 0.02,
+            "10": 0.03,
+            "11": 0.04,
+            "12": 0.09,
+            "13": 0.12,
+            "14": 0.11,
+            "15": 0.175,
+            "16": 0.16,
+            "17": 0.07,
+            "18": 0.045,
+            "19": 0.03,
+            "20": 0.03,
+            "21": 0.02,
+            "22": 0.055
+          }
+        }
+      ]
+    },
+    "PER": {
+      "grid": 19,
+      "team": "Cadillac",
+      "base_pace_s": 94.806,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 17.82,
+          "expected_finish_all": 18.07,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.095,
+          "p_optimal": 0.025,
+          "mean_race_time_s": 5215.15,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "13": 0.01,
+            "14": 0.025,
+            "15": 0.07,
+            "16": 0.1,
+            "17": 0.185,
+            "18": 0.2,
+            "19": 0.18,
+            "20": 0.095,
+            "21": 0.09,
+            "22": 0.045
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 17.72,
+          "expected_finish_all": 17.98,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.095,
+          "p_optimal": 0.115,
+          "mean_race_time_s": 5212.27,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "13": 0.015,
+            "14": 0.025,
+            "15": 0.075,
+            "16": 0.14,
+            "17": 0.135,
+            "18": 0.2,
+            "19": 0.205,
+            "20": 0.06,
+            "21": 0.11,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 17.45,
+          "expected_finish_all": 17.74,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.095,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5209.84,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "11": 0.005,
+            "13": 0.005,
+            "14": 0.02,
+            "15": 0.07,
+            "16": 0.175,
+            "17": 0.18,
+            "18": 0.195,
+            "19": 0.205,
+            "20": 0.055,
+            "21": 0.055,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 17.47,
+          "expected_finish_all": 17.75,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.095,
+          "p_optimal": 0.085,
+          "mean_race_time_s": 5211.26,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "12": 0.01,
+            "13": 0.005,
+            "14": 0.035,
+            "15": 0.12,
+            "16": 0.1,
+            "17": 0.18,
+            "18": 0.165,
+            "19": 0.185,
+            "20": 0.1,
+            "21": 0.065,
+            "22": 0.035
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 17.77,
+          "expected_finish_all": 18.03,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            21.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.095,
+          "p_optimal": 0.06,
+          "mean_race_time_s": 5212.19,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "12": 0.005,
+            "13": 0.005,
+            "14": 0.03,
+            "15": 0.06,
+            "16": 0.12,
+            "17": 0.2,
+            "18": 0.16,
+            "19": 0.175,
+            "20": 0.12,
+            "21": 0.09,
+            "22": 0.035
+          }
+        }
+      ]
+    },
+    "STR": {
+      "grid": 20,
+      "team": "Aston Martin",
+      "base_pace_s": 94.935,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 17.41,
+          "expected_finish_all": 17.95,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.005,
+          "p_dnf": 0.155,
+          "p_optimal": 0.085,
+          "mean_race_time_s": 5217.48,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "10": 0.005,
+            "11": 0.005,
+            "12": 0.005,
+            "13": 0.005,
+            "14": 0.01,
+            "15": 0.085,
+            "16": 0.13,
+            "17": 0.19,
+            "18": 0.18,
+            "19": 0.15,
+            "20": 0.095,
+            "21": 0.075,
+            "22": 0.065
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "MEDIUM"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            19
+          ],
+          "stint_lengths": [
+            19,
+            33
+          ],
+          "expected_finish": 17.36,
+          "expected_finish_all": 17.9,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.155,
+          "p_optimal": 0.335,
+          "mean_race_time_s": 5214.56,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "12": 0.01,
+            "13": 0.005,
+            "14": 0.035,
+            "15": 0.095,
+            "16": 0.105,
+            "17": 0.17,
+            "18": 0.23,
+            "19": 0.13,
+            "20": 0.07,
+            "21": 0.08,
+            "22": 0.07
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 17.22,
+          "expected_finish_all": 17.79,
+          "median_finish": 18.0,
+          "finish_ci": [
+            14.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.155,
+          "p_optimal": 0.06,
+          "mean_race_time_s": 5214.94,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "11": 0.005,
+            "12": 0.005,
+            "13": 0.005,
+            "14": 0.04,
+            "15": 0.105,
+            "16": 0.115,
+            "17": 0.195,
+            "18": 0.185,
+            "19": 0.125,
+            "20": 0.08,
+            "21": 0.07,
+            "22": 0.07
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "HARD"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            30
+          ],
+          "stint_lengths": [
+            30,
+            22
+          ],
+          "expected_finish": 17.43,
+          "expected_finish_all": 17.96,
+          "median_finish": 18.0,
+          "finish_ci": [
+            14.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.015,
+          "p_dnf": 0.155,
+          "p_optimal": 0.065,
+          "mean_race_time_s": 5214.32,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "9": 0.01,
+            "10": 0.005,
+            "12": 0.005,
+            "13": 0.01,
+            "14": 0.025,
+            "15": 0.08,
+            "16": 0.14,
+            "17": 0.13,
+            "18": 0.155,
+            "19": 0.17,
+            "20": 0.13,
+            "21": 0.07,
+            "22": 0.07
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            23
+          ],
+          "stint_lengths": [
+            23,
+            29
+          ],
+          "expected_finish": 17.54,
+          "expected_finish_all": 18.06,
+          "median_finish": 18.0,
+          "finish_ci": [
+            14.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.005,
+          "p_dnf": 0.155,
+          "p_optimal": 0.065,
+          "mean_race_time_s": 5216.34,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "8": 0.005,
+            "13": 0.015,
+            "14": 0.035,
+            "15": 0.06,
+            "16": 0.11,
+            "17": 0.185,
+            "18": 0.16,
+            "19": 0.175,
+            "20": 0.1,
+            "21": 0.085,
+            "22": 0.07
+          }
+        }
+      ]
+    },
+    "ALO": {
+      "grid": 21,
+      "team": "Aston Martin",
+      "base_pace_s": 95.052,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "MEDIUM",
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            18,
+            34
+          ],
+          "stint_lengths": [
+            18,
+            16,
+            18
+          ],
+          "expected_finish": 18.06,
+          "expected_finish_all": 18.59,
+          "median_finish": 19.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.005,
+          "p_dnf": 0.225,
+          "p_optimal": 0.025,
+          "mean_race_time_s": 5211.08,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "10": 0.005,
+            "13": 0.005,
+            "14": 0.02,
+            "15": 0.03,
+            "16": 0.09,
+            "17": 0.13,
+            "18": 0.21,
+            "19": 0.155,
+            "20": 0.165,
+            "21": 0.105,
+            "22": 0.085
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 17.75,
+          "expected_finish_all": 18.36,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.005,
+          "p_dnf": 0.225,
+          "p_optimal": 0.15,
+          "mean_race_time_s": 5205.54,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "10": 0.005,
+            "11": 0.005,
+            "13": 0.005,
+            "14": 0.025,
+            "15": 0.03,
+            "16": 0.135,
+            "17": 0.12,
+            "18": 0.205,
+            "19": 0.15,
+            "20": 0.155,
+            "21": 0.085,
+            "22": 0.08
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 17.77,
+          "expected_finish_all": 18.38,
+          "median_finish": 18.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.225,
+          "p_optimal": 0.105,
+          "mean_race_time_s": 5206.14,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "11": 0.005,
+            "12": 0.01,
+            "13": 0.005,
+            "14": 0.03,
+            "15": 0.015,
+            "16": 0.105,
+            "17": 0.16,
+            "18": 0.18,
+            "19": 0.2,
+            "20": 0.13,
+            "21": 0.07,
+            "22": 0.09
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "SOFT",
+            "HARD"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            33
+          ],
+          "stint_lengths": [
+            17,
+            16,
+            19
+          ],
+          "expected_finish": 17.83,
+          "expected_finish_all": 18.41,
+          "median_finish": 19.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.225,
+          "p_optimal": 0.015,
+          "mean_race_time_s": 5208.5,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "11": 0.005,
+            "12": 0.005,
+            "14": 0.025,
+            "15": 0.04,
+            "16": 0.105,
+            "17": 0.125,
+            "18": 0.185,
+            "19": 0.215,
+            "20": 0.14,
+            "21": 0.08,
+            "22": 0.075
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 18.08,
+          "expected_finish_all": 18.61,
+          "median_finish": 19.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.225,
+          "p_optimal": 0.04,
+          "mean_race_time_s": 5208.59,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "11": 0.005,
+            "14": 0.025,
+            "15": 0.035,
+            "16": 0.08,
+            "17": 0.14,
+            "18": 0.175,
+            "19": 0.175,
+            "20": 0.2,
+            "21": 0.085,
+            "22": 0.08
+          }
+        }
+      ]
+    },
+    "BOT": {
+      "grid": 22,
+      "team": "Cadillac",
+      "base_pace_s": 95.19,
+      "candidates": [
+        {
+          "rank": 1,
+          "n_stops": 2,
+          "compounds": [
+            "HARD",
+            "MEDIUM",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            16,
+            34
+          ],
+          "stint_lengths": [
+            16,
+            18,
+            18
+          ],
+          "expected_finish": 18.56,
+          "expected_finish_all": 18.95,
+          "median_finish": 19.0,
+          "finish_ci": [
+            16.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.185,
+          "p_optimal": 0.1,
+          "mean_race_time_s": 5214.16,
+          "plausibility_prior": 0.16379,
+          "finish_distribution": {
+            "11": 0.005,
+            "13": 0.01,
+            "14": 0.005,
+            "15": 0.03,
+            "16": 0.06,
+            "17": 0.135,
+            "18": 0.115,
+            "19": 0.205,
+            "20": 0.19,
+            "21": 0.16,
+            "22": 0.085
+          }
+        },
+        {
+          "rank": 2,
+          "n_stops": 1,
+          "compounds": [
+            "MEDIUM",
+            "SOFT"
+          ],
+          "start_compound": "MEDIUM",
+          "planned_pit_laps": [
+            33
+          ],
+          "stint_lengths": [
+            33,
+            19
+          ],
+          "expected_finish": 18.42,
+          "expected_finish_all": 18.84,
+          "median_finish": 19.0,
+          "finish_ci": [
+            15.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.185,
+          "p_optimal": 0.135,
+          "mean_race_time_s": 5212.24,
+          "plausibility_prior": 0.05486,
+          "finish_distribution": {
+            "12": 0.005,
+            "13": 0.01,
+            "14": 0.02,
+            "15": 0.025,
+            "16": 0.07,
+            "17": 0.105,
+            "18": 0.145,
+            "19": 0.23,
+            "20": 0.175,
+            "21": 0.125,
+            "22": 0.09
+          }
+        },
+        {
+          "rank": 3,
+          "n_stops": 2,
+          "compounds": [
+            "SOFT",
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "SOFT",
+          "planned_pit_laps": [
+            17,
+            36
+          ],
+          "stint_lengths": [
+            17,
+            19,
+            16
+          ],
+          "expected_finish": 18.44,
+          "expected_finish_all": 18.85,
+          "median_finish": 19.0,
+          "finish_ci": [
+            16.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.185,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5216.9,
+          "plausibility_prior": 0.01724,
+          "finish_distribution": {
+            "12": 0.005,
+            "14": 0.015,
+            "15": 0.02,
+            "16": 0.065,
+            "17": 0.16,
+            "18": 0.155,
+            "19": 0.175,
+            "20": 0.18,
+            "21": 0.145,
+            "22": 0.08
+          }
+        },
+        {
+          "rank": 4,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "MEDIUM"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            22
+          ],
+          "stint_lengths": [
+            22,
+            30
+          ],
+          "expected_finish": 18.74,
+          "expected_finish_all": 19.1,
+          "median_finish": 19.0,
+          "finish_ci": [
+            16.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.185,
+          "p_optimal": 0.07,
+          "mean_race_time_s": 5214.6,
+          "plausibility_prior": 0.02194,
+          "finish_distribution": {
+            "11": 0.005,
+            "12": 0.005,
+            "14": 0.005,
+            "15": 0.015,
+            "16": 0.04,
+            "17": 0.095,
+            "18": 0.165,
+            "19": 0.25,
+            "20": 0.205,
+            "21": 0.115,
+            "22": 0.1
+          }
+        },
+        {
+          "rank": 5,
+          "n_stops": 1,
+          "compounds": [
+            "HARD",
+            "SOFT"
+          ],
+          "start_compound": "HARD",
+          "planned_pit_laps": [
+            29
+          ],
+          "stint_lengths": [
+            29,
+            23
+          ],
+          "expected_finish": 18.65,
+          "expected_finish_all": 19.02,
+          "median_finish": 19.0,
+          "finish_ci": [
+            16.0,
+            22.0
+          ],
+          "p_win": 0.0,
+          "p_podium": 0.0,
+          "p_points": 0.0,
+          "p_dnf": 0.185,
+          "p_optimal": 0.05,
+          "mean_race_time_s": 5213.43,
+          "plausibility_prior": 0.01097,
+          "finish_distribution": {
+            "12": 0.01,
+            "13": 0.01,
+            "14": 0.005,
+            "15": 0.015,
+            "16": 0.03,
+            "17": 0.135,
+            "18": 0.155,
+            "19": 0.21,
+            "20": 0.21,
+            "21": 0.115,
+            "22": 0.105
+          }
+        }
+      ]
+    }
+  }
+}

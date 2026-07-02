@@ -1,0 +1,89 @@
+# strategy_sim2 configuration
+# All paths are relative to the repository root (resolved by strategy_sim2/settings.py).
+
+data:
+  cache_dir: strategy_sim2/data/cache/fastf1   # FastF1 raw session cache
+  derived_dir: strategy_sim2/data/derived      # cleaned parquet / derived tables
+  manifest_path: strategy_sim2/data/manifest.json
+  circuit_profiles_path: strategy_sim2/data/circuit_profiles.json
+
+training:
+  # Historical window for parameter estimation.
+  # 2021 is the last pre-ground-effect season; including it dilutes a ground-effect
+  # skew. 2026 is itself a NEW regulation set, so estimators are recency-weighted and
+  # pooled rather than trusting the sparse 2026 sample alone.
+  start_year: 2021
+  end_year: 2026
+  # weight(season) = recency_decay ** (end_year - season). Validated out-of-sample.
+  recency_decay: 0.7
+
+target:
+  year: 2026
+  # In FastF1's 2026 calendar Silverstone (British GP) is ROUND 9 (2026-07-05, a
+  # sprint weekend) and is the upcoming race with no sessions yet -> preliminary mode.
+  # (The brief called it "round 14"; that slot is Madrid. Data-driven numbering wins.)
+  upcoming_round: 9
+  last_completed_round: 8   # rounds 1-8 of 2026 are complete and usable for training
+
+simulation:
+  n_sims: 1000
+  seed: 20260702
+  lap1_penalty: 2.5         # standing-start + cold-tyre time added to lap 1 (s)
+  start_gap_scale: 0.35     # seconds per grid slot when converting start gains to time
+  pit_jitter_sd: 1.5        # SD (laps) on the actual pit lap vs the planned lap
+
+overtaking:
+  min_gap: 0.5              # closest following gap in cumulative time (s)
+  drs_gap: 1.0             # within this gap last lap -> DRS available
+  drs_bonus: 0.4           # lap-time reduction from DRS (s)
+  penalty: 0.3             # time both cars lose in a completed pass (s)
+  pass_prob_easy: 0.65     # pass probability on the easiest-to-overtake circuit
+  pass_prob_hard: 0.12     # ... on the hardest
+  threshold_easy: 0.05     # pace advantage needed to attempt a pass, easy circuit (s)
+  threshold_hard: 0.70     # ... hard circuit (s)
+
+safety_car:
+  sc_factor: 1.40          # lap-time multiplier under full safety car
+  vsc_factor: 1.28         # ... under virtual safety car
+  sc_pit_discount: 0.5     # fraction of pit loss actually paid when stopping under SC
+  vsc_pit_discount: 0.65
+  sc_min_laps: 3
+  sc_max_laps: 6
+  vsc_min_laps: 1
+  vsc_max_laps: 3
+
+compounds:
+  dry: [SOFT, MEDIUM, HARD]
+  wet: [INTERMEDIATE, WET]
+  min_distinct_dry: 2       # dry-race rule: at least two different slick compounds
+
+generation:
+  min_stops: 1
+  max_stops: 3
+  min_stint: 6            # minimum laps per stint when placing pit windows
+  shortlist_k: 12         # candidates kept for Monte-Carlo evaluation
+  # physical tyre-life caps as a fraction of race distance (guards thin-data deg)
+  max_stint_frac: {SOFT: 0.5, MEDIUM: 0.7, HARD: 1.0}
+
+selection:
+  min_candidates: 2
+  max_candidates: 5
+  prior_weight: 0.3        # weight on historical plausibility vs expected finish
+  ci_lo: 5
+  ci_hi: 95
+
+params:
+  # empirical-Bayes shrinkage strengths (laps): larger = shrink harder to global
+  k_circuit: 500
+  k_driver: 800
+  dnf_min_races: 4          # min races before a driver informs the DNF prior
+  start_sigma: 1.0          # Gaussian smoothing of the start position-change kernel
+  start_min_samples: 5      # below this, use the pooled start distribution
+
+cleaning:
+  drop_lap1: true
+  drop_inlap_outlap: true
+  drop_deleted: true
+  require_accurate: true
+  # drop green-flag laps slower than this fraction of the stint's median (traffic/errors)
+  outlier_pct_of_stint_median: 1.07

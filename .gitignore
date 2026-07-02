@@ -5,3 +5,8 @@ f1_cache/
 
 __pycache__
 venv/
+
+strategy_sim2/data/cache
+strategy_sim2/data/derived
+
+paper-sulsters.md
