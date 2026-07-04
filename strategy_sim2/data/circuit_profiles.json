@@ -9,7 +9,7 @@
     "sc_expected_laps": 3.2,
     "passes_per_race": 184.4,
     "overtaking_difficulty": 0.13231773667029367,
-    "deg_severity": 0.11762141136473843,
+    "deg_severity": 0.11810141136473844,
     "fuel_coef": 0.07108844919071962,
     "n_races": 5,
     "fallback": false
@@ -69,7 +69,7 @@
     "sc_expected_laps": 4.2,
     "passes_per_race": 105.0,
     "overtaking_difficulty": 0.6507072905331882,
-    "deg_severity": 0.014412784870239554,
+    "deg_severity": 0.019746118203572888,
     "fuel_coef": 0.07015816978241561,
     "n_races": 5,
     "fallback": false
@@ -144,7 +144,7 @@
     "sc_expected_laps": 3.0,
     "passes_per_race": 134.4,
     "overtaking_difficulty": 0.4587595212187159,
-    "deg_severity": 0.029871617637153458,
+    "deg_severity": 0.030246150970486788,
     "fuel_coef": 0.048356970685678846,
     "n_races": 5,
     "fallback": false
@@ -204,7 +204,7 @@
     "sc_expected_laps": 6.4,
     "passes_per_race": 82.0,
     "overtaking_difficulty": 0.8008705114254624,
-    "deg_severity": 0.022972153610632456,
+    "deg_severity": 0.024766286943965793,
     "fuel_coef": 0.06765997252389916,
     "n_races": 5,
     "fallback": false
@@ -234,7 +234,7 @@
     "sc_expected_laps": 7.5,
     "passes_per_race": 110.0,
     "overtaking_difficulty": 0.618063112078346,
-    "deg_severity": 0.04109291031955523,
+    "deg_severity": 0.05081291031955524,
     "fuel_coef": 0.05301974402789172,
     "n_races": 4,
     "fallback": false
@@ -264,7 +264,7 @@
     "sc_expected_laps": 1.5,
     "passes_per_race": 170.5,
     "overtaking_difficulty": 0.22306855277475512,
-    "deg_severity": 0.07178416306530079,
+    "deg_severity": 0.07288829639863413,
     "fuel_coef": 0.07835589702736356,
     "n_races": 2,
     "fallback": false
@@ -294,7 +294,7 @@
     "sc_expected_laps": 0.0,
     "passes_per_race": 171.33333333333334,
     "overtaking_difficulty": 0.21762785636561466,
-    "deg_severity": 0.04496609093175206,
+    "deg_severity": 0.048596090931752066,
     "fuel_coef": 0.04850309458448966,
     "n_races": 3,
     "fallback": false
@@ -324,7 +324,7 @@
     "sc_expected_laps": 2.75,
     "passes_per_race": 116.25,
     "overtaking_difficulty": 0.5772578890097932,
-    "deg_severity": 0.07348722597850622,
+    "deg_severity": 0.07711722597850622,
     "fuel_coef": 0.07554083421751535,
     "n_races": 4,
     "fallback": false
@@ -339,7 +339,7 @@
     "sc_expected_laps": 6.666666666666667,
     "passes_per_race": 167.66666666666666,
     "overtaking_difficulty": 0.2415669205658324,
-    "deg_severity": 0.042127183855271366,
+    "deg_severity": 0.0422637171886047,
     "fuel_coef": 0.07499754623547843,
     "n_races": 3,
     "fallback": false
@@ -369,7 +369,7 @@
     "sc_expected_laps": 4.666666666666667,
     "passes_per_race": 135.33333333333334,
     "overtaking_difficulty": 0.45266594124047865,
-    "deg_severity": 0.06823915055875535,
+    "deg_severity": 0.07203248389208866,
     "fuel_coef": 0.06592701208923282,
     "n_races": 3,
     "fallback": false

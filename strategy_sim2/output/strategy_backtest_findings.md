@@ -1,3 +1,44 @@
+# UPDATE — after improvements 1–4 (+ ground-truth bug fix, + prior-weight tune)
+
+Implemented: (1) tyre **degradation cliff** with data-driven per-compound/per-circuit knees +
+regularised fresh-tyre **compound offsets**; (2) **history-aware stop count** (circuit stop
+distribution weights selection) + **history-weighted compound choice** (`prior_weight` tuned OOS
+0.3→1.0); (3) **history-calibrated pit windows** (blend analytic optimum with observed windows /
+undercut); (4) **red-flag handling** (shared stint-cleaner merges SC/red-flag flurries) + circuit
+stop rules (Monaco mandatory 2-stop). Also fixed a bug in the stint extractor that was collapsing
+legitimate repeat-compound stops (MEDIUM-HARD-**HARD** → MEDIUM-HARD), which had corrupted the
+"actual" ground truth for every repeat-compound strategy.
+
+**Before → after (top-1 pick vs actual, OOS, same 6 dry 2026 races, 200 sims/driver):**
+
+| Metric (top-1) | Baseline | **Improved** | History baseline |
+|---|---|---|---|
+| Stop-count accuracy | 58.8% | **75.5%** | 64.7% |
+| Compound choice (multiset) | 46.1% | **52.9%** | 39.2% |
+| Compound order (sequence) | 28.4% | **35.3%** | — |
+| First-stop pit-lap MAE | 7.3 laps | **6.2 laps** | — |
+| First stop within ±3 laps | 15% | **36.4%** | — |
+| Monaco stop-count | 0% | **69%** | — |
+
+By actual stop count (improved): **1-stop 100% stop / 98% compound**; 2-stop 82% / 32%;
+3-stop 0% (still predicted as 2-stop).
+
+**What moved:** the cliff makes multi-stops economically correct and stop-count now beats the
+history baseline by ~11 pts; the compound offsets + `prior_weight` roughly halved the soft
+over-use (compound choice now beats baseline by ~14 pts); history-calibrated windows more than
+doubled the ±3-lap pit hit rate; the red-flag cleaner + Monaco rule took Monaco from 0% to 69%.
+
+**Still weak (next steps):** (a) **2-stop compound choice (32%)** — residual soft over-use at some
+circuits (esp. Barcelona, where 2026's M-H-H diverged from history and softs are still over-picked);
+addressable by a stronger per-circuit soft cliff or an explicit end-on-soft penalty. (b) **3-stops
+are never chosen** (predicted as 2-stop) — the cliff lifted 1→2 but not 2→3; needs a steeper
+high-age cliff or 3-stop-friendly economics at high-deg circuits. (c) A full **Optuna** pass over
+cliff_rate / offset weight / stops_weight (harness exists) would likely recover more.
+
+---
+
+# ORIGINAL analysis (pre-improvement baseline)
+
 # Strategy-accuracy backtest — dry 2026 races (post-quali)
 
 **Method.** Parameters trained on **2021–2025 only** (test year excluded → no leakage),

@@ -32,12 +32,13 @@ def _family(c: Candidate) -> tuple:
 
 
 def select(pool: list[Candidate], finish: np.ndarray, rtime: np.ndarray,
-           cfg: dict, n_positions: int) -> list[SelectedStrategy]:
+           cfg: dict, n_positions: int, prior=None) -> list[SelectedStrategy]:
     K, S = finish.shape
     sel = cfg.get("selection", {})
     k_min = int(sel.get("min_candidates", 2))
     k_max = int(sel.get("max_candidates", 5))
     w_prior = float(sel.get("prior_weight", 0.3))
+    w_stops = float(sel.get("stops_weight", 0.6))
 
     outcomes = [Outcome(finish[k], rtime[k]) for k in range(K)]
     # Rank on expected finish given the driver finishes: DNF risk is ~strategy-independent
@@ -45,6 +46,11 @@ def select(pool: list[Candidate], finish: np.ndarray, rtime: np.ndarray,
     mean_fin = np.array([o.mean_finish_classified for o in outcomes])
     priors = np.array([max(c.prior, 1e-9) for c in pool])
     score = mean_fin - w_prior * np.log(priors)  # lower is better
+    # Extra weight on the historical stop-count distribution (corrects a one-stop bias;
+    # the naive "modal stop count" baseline beats pure economics on stop count).
+    if prior is not None:
+        score = score - w_stops * np.array(
+            [np.log(max(prior.stop_prior(c.n_stops), 1e-9)) for c in pool])
 
     # P(optimal) via CRN pairing: per sim, the candidate giving the best finish.
     f = np.where(np.isnan(finish), n_positions + 1, finish)

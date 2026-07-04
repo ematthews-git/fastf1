@@ -23,17 +23,22 @@ Generation, evaluation and selection are independent components.
 ## Pipeline
 
 ```
-data/        FastF1 collection, dry/wet filtering (manifest), clean-lap building
-params/      lap model (joint fuel+tyre, hierarchical/shrunk), DNF (Beta-Bernoulli),
-             start-line, circuit profiles (pit loss, SC/VSC, overtaking difficulty, deg)
-generation/  full rule-legal candidates + historical plausibility priors
+data/        FastF1 collection, dry/wet filtering (manifest), clean-lap building,
+             strategy extraction (red-flag/SC stint flurries merged), rate-limited backfill
+params/      lap model (joint fuel+tyre, deg cliff w/ data-driven knees, hierarchical/shrunk),
+             weekend practice/sprint long-run model (relative deg, offsets, usage),
+             DNF (Beta-Bernoulli), start-line, circuit profiles
+generation/  ALL rule-legal candidates (>=2 compounds + physical set allocation) with
+             recency-weighted priors (stop count, pattern, start compound, weekend usage);
+             family-coverage shortlist; history-calibrated pit windows (+undercut shift)
 sim/         discrete-event lap-by-lap simulator: overtaking(+DRS), safety car/VSC, pits
-context/     postquali (grid+quali known) and prelim (pre-weekend, current-season form)
+context/     postquali (grid+quali+practice) and prelim (pre-weekend, current-season form);
+             expanding-window rule: priors/params only see races strictly before the target
 evaluation/  Monte-Carlo with common random numbers; per-candidate outcome distributions
-selection/   rank 2-5 by expected finish (given finished) + plausibility, P(optimal), diversity
-report/      JSON output for the strategy page
-validation/  out-of-sample backtests (time-split)
-tuning/      Optuna tuning of simulator params (train fold -> held-out fold)
+selection/   rank 2-5 by expected finish (given finished) + priors, P(optimal), diversity
+report/      JSON output for the strategy page (incl. pit-window ranges)
+validation/  finish backtest + strategy-accuracy backtest (--strategy, expanding window)
+tuning/      Optuna OOS tuning (2024/25 train folds -> 2026 holdout)
 ```
 
 ## Usage
@@ -51,7 +56,9 @@ venv/bin/python -m strategy_sim2.run --mode prelim --year 2026 --round 9
 
 # out-of-sample validation and tuning
 venv/bin/python -m strategy_sim2.validation.backtest --test-year 2024 --max-races 5
-venv/bin/python -m strategy_sim2.tuning.optuna_tune --trials 20
+venv/bin/python -m strategy_sim2.validation.backtest --strategy --test-year 2026 --sims 200
+venv/bin/python -m strategy_sim2.data.backfill --practice --years 2026 --rounds 1 2 3   # FP/Sprint cache
+venv/bin/python -m strategy_sim2.tuning.optuna_tune --trials 25 --sims 80
 ```
 
 Output: `strategy_sim2/output/<year>_<round>_<mode>.json` — per driver, ranked candidates

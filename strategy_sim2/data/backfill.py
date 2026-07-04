@@ -71,10 +71,49 @@ def backfill(cfg: dict | None = None, delay: float = 20.0,
           f"unavailable={skipped}", flush=True)
 
 
+# Practice sessions per event format (weekend tyre-behaviour data for params/weekend.py).
+_PRACTICE_SESSIONS = {
+    "conventional": ["FP1", "FP2", "FP3"],
+    "sprint": ["FP1", "S"],
+    "sprint_qualifying": ["FP1", "S"],
+    "sprint_shootout": ["FP1", "S"],
+}
+
+
+def backfill_practice(year: int, rounds: list[int] | None = None,
+                      delay: float = 15.0, cooldown: float = 3660.0) -> None:
+    """Fetch FP/Sprint sessions into the FastF1 cache (rate-limit aware, resumable —
+    cached sessions cost no API budget on reload)."""
+    import time as _time
+
+    sched = collector.get_schedule(year)
+    for _, ev in sched.iterrows():
+        rnd = int(ev["RoundNumber"])
+        if rnd < 1 or (rounds is not None and rnd not in rounds):
+            continue
+        sessions = _PRACTICE_SESSIONS.get(str(ev["EventFormat"]), ["FP1", "FP2", "FP3"])
+        for ses_name in sessions:
+            if collector.rate_limited():
+                print(f"[practice] rate limited; sleeping {cooldown:.0f}s", flush=True)
+                _time.sleep(cooldown)
+                collector._RATE_LIMITED = False
+            ses = collector.load_session(year, rnd, ses_name, weather=False, messages=False)
+            print(f"[practice] {year} R{rnd} {ses_name}: "
+                  f"{'ok' if ses is not None else 'unavailable'}", flush=True)
+            _time.sleep(delay)
+    print("[practice] complete", flush=True)
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--delay", type=float, default=20.0, help="seconds between network loads")
     ap.add_argument("--cooldown", type=float, default=3660.0, help="sleep on rate limit")
     ap.add_argument("--years", type=int, nargs="*", default=None)
+    ap.add_argument("--practice", action="store_true", help="fetch FP/Sprint sessions instead of races")
+    ap.add_argument("--rounds", type=int, nargs="*", default=None)
     args = ap.parse_args()
-    backfill(delay=args.delay, cooldown=args.cooldown, years=args.years)
+    if args.practice:
+        year = args.years[0] if args.years else 2026
+        backfill_practice(year, rounds=args.rounds, delay=args.delay, cooldown=args.cooldown)
+    else:
+        backfill(delay=args.delay, cooldown=args.cooldown, years=args.years)

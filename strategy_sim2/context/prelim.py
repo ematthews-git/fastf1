@@ -63,7 +63,7 @@ def build_prelim_context(year: int, rnd: int, params, profiles, cfg=None) -> Wee
     # avoids the contradiction of seeding a slow-pace driver onto the front row.
     grid = {d: i + 1 for i, d in enumerate(sorted(entry, key=lambda d: base_pace[d]))}
 
-    prior = build_strategy_prior(circuit, cfg)
+    prior = build_strategy_prior(circuit, cfg, before=(year, rnd))
     return WeekendContext(
         year=year, round=rnd, circuit=circuit, profile=profile, params=params,
         prior=prior, grid=grid, base_pace=base_pace, teams=teams,

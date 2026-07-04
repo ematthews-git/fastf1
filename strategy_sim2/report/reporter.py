@@ -29,6 +29,7 @@ def _strategy_dict(s: SelectedStrategy, n_positions: int, cfg: dict) -> dict:
         "compounds": list(s.candidate.compounds),
         "start_compound": s.candidate.start_compound,
         "planned_pit_laps": list(s.candidate.pit_laps),
+        "pit_windows": [list(w) for w in s.candidate.pit_windows],
         "stint_lengths": list(s.candidate.stint_lengths),
         "expected_finish": _round(o.mean_finish_classified, 2),  # given the driver finishes
         "expected_finish_all": _round(o.mean_finish, 2),         # incl. DNF sims

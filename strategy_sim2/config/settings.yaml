@@ -61,14 +61,42 @@ generation:
   min_stops: 1
   max_stops: 3
   min_stint: 6            # minimum laps per stint when placing pit windows
-  shortlist_k: 12         # candidates kept for Monte-Carlo evaluation
+  shortlist_k: 16         # candidates kept for Monte-Carlo evaluation (covers all families)
+  shortlist_prior_weight: 6.0  # plausibility weight in the shortlist score (tunable)
+  window_history_weight: 0.8   # MAX weight on observed windows (scales with history richness)
+  window_history_k: 4.0        # observed windows needed to reach half of that weight
+  undercut_shift_laps: 2.0     # analytic windows shifted earlier (undercut threat), tunable
   # physical tyre-life caps as a fraction of race distance (guards thin-data deg)
   max_stint_frac: {SOFT: 0.5, MEDIUM: 0.7, HARD: 1.0}
+  # physical race allocation: max stints per compound (typical Pirelli fresh sets)
+  allocation_sets: {SOFT: 2, MEDIUM: 2, HARD: 2}
+
+# Circuit-specific rules (e.g. Monaco's mandatory two stops from 2025).
+circuit_rules:
+  Monte Carlo: {min_stops: 2}
+
+# Weekend practice/sprint long-run ingestion (post-quali mode).
+weekend:
+  use_practice: true
+  min_run_laps: 5          # min laps for a stint to count as a long run
+  min_runs: 6              # min long runs across the weekend to trust the fit
+  k_weekend_laps: 60       # EB blend: weekend laps needed to outweigh history
+  usage_alpha: 8.0         # smoothing of the practice compound-usage prior
+  # Weak by default: teams also PROTECT race sets (low practice use of a compound can
+  # mean "saving it to race it"), so the sign/strength is left to OOS tuning.
+  usage_weight: 0.3        # exponent on the usage prior in candidate plausibility
+
+# Historical plausibility prior (hierarchical: circuit evidence shrunk to global meta).
+prior:
+  alpha: 1.0
+  start_blend_k: 12.0      # circuit start-compound evidence to outweigh the global
+  pattern_blend_k: 10.0    # circuit strategies to outweigh the recency-weighted global meta
 
 selection:
   min_candidates: 2
   max_candidates: 5
-  prior_weight: 0.3        # weight on historical plausibility vs expected finish
+  prior_weight: 1.0        # weight on historical compound-pattern plausibility (tuned OOS)
+  stops_weight: 0.6        # extra weight on the historical stop-count distribution
   ci_lo: 5
   ci_hi: 95
 
@@ -79,8 +107,15 @@ params:
   dnf_min_races: 4          # min races before a driver informs the DNF prior
   start_sigma: 1.0          # Gaussian smoothing of the start position-change kernel
   start_min_samples: 5      # below this, use the pooled start distribution
+  # tyre degradation cliff (censored from data, so imposed with a data-driven knee)
+  knee_percentile: 80       # cliff onset = this percentile of observed stint lengths
+  cliff_rate: 0.02          # accelerating deg penalty (s/lap^2) beyond the knee
+  # compound pace offsets: regularise the noisy direct estimate toward the known ordering
+  compound_offset_prior: {SOFT: -0.35, MEDIUM: 0.0, HARD: 0.25}
+  offset_prior_weight: 0.5
 
 cleaning:
+  min_strategic_stint: 5   # stints shorter than this are merged (red-flag/SC flurries)
   drop_lap1: true
   drop_inlap_outlap: true
   drop_deleted: true

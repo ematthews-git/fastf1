@@ -39,13 +39,28 @@ def get_race_meta(year: int, rnd: int, cfg: dict | None = None,
     return results, lap1
 
 
-def _filter_years(df: pd.DataFrame, years: list[int] | None) -> pd.DataFrame:
-    return df if years is None else df[df["year"].isin(years)]
+def filter_window(df: pd.DataFrame, years: list[int] | None = None,
+                  before: tuple[int, int] | None = None) -> pd.DataFrame:
+    """Restrict a races frame by season list and/or a strict (year, round) cutoff.
+
+    ``before=(y, r)`` keeps only races that happened strictly before round r of year y —
+    the expanding-window rule used by backtests so training matches what production
+    would have known pre-race (including completed current-season rounds).
+    """
+    if not len(df):
+        return df
+    if years is not None:
+        df = df[df["year"].isin(years)]
+    if before is not None:
+        y, r = before
+        df = df[(df["year"] < y) | ((df["year"] == y) & (df["round"] < r))]
+    return df
 
 
-def training_laps(cfg: dict | None = None, years: list[int] | None = None) -> pd.DataFrame:
+def training_laps(cfg: dict | None = None, years: list[int] | None = None,
+                  before: tuple[int, int] | None = None) -> pd.DataFrame:
     cfg = cfg or load_settings()
-    races = _filter_years(session_filter.included_races(cfg), years)
+    races = filter_window(session_filter.included_races(cfg), years, before)
     frames = []
     for _, r in races.iterrows():
         df = clean.get_clean_race(int(r["year"]), int(r["round"]), cfg)
@@ -63,20 +78,22 @@ def _all_manifest_races(cfg: dict | None = None) -> pd.DataFrame:
     return m if len(m) else session_filter.build_manifest(cfg)
 
 
-def training_results(cfg: dict | None = None, years: list[int] | None = None) -> pd.DataFrame:
+def training_results(cfg: dict | None = None, years: list[int] | None = None,
+                     before: tuple[int, int] | None = None) -> pd.DataFrame:
     cfg = cfg or load_settings()
     frames = []
-    for _, r in _filter_years(_all_manifest_races(cfg), years).iterrows():
+    for _, r in filter_window(_all_manifest_races(cfg), years, before).iterrows():
         meta = get_race_meta(int(r["year"]), int(r["round"]), cfg)
         if meta is not None:
             frames.append(meta[0])
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
-def training_lap1(cfg: dict | None = None, years: list[int] | None = None) -> pd.DataFrame:
+def training_lap1(cfg: dict | None = None, years: list[int] | None = None,
+                  before: tuple[int, int] | None = None) -> pd.DataFrame:
     cfg = cfg or load_settings()
     frames = []
-    for _, r in _filter_years(_all_manifest_races(cfg), years).iterrows():
+    for _, r in filter_window(_all_manifest_races(cfg), years, before).iterrows():
         meta = get_race_meta(int(r["year"]), int(r["round"]), cfg)
         if meta is not None:
             frames.append(meta[1])

@@ -71,12 +71,12 @@ def _passes_for_race(raw: pd.DataFrame) -> float:
 
 
 def build_circuit_profiles(lap_model: LapModel, cfg: dict | None = None,
-                           save: bool = True,
-                           years: list[int] | None = None) -> dict[str, CircuitProfile]:
+                           save: bool = True, years: list[int] | None = None,
+                           before: tuple[int, int] | None = None) -> dict[str, CircuitProfile]:
+    from strategy_sim2.params.dataset import filter_window
+
     cfg = cfg or load_settings()
-    races = session_filter.included_races(cfg)
-    if years is not None:
-        races = races[races["year"].isin(years)]
+    races = filter_window(session_filter.included_races(cfg), years, before)
 
     per_circuit: dict[str, dict] = {}
     for _, r in races.iterrows():

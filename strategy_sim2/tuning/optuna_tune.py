@@ -1,88 +1,149 @@
-"""Out-of-sample tuning of the simulator's free parameters with Optuna.
+"""Out-of-sample tuning of the engine's free parameters with Optuna.
 
-Estimation parameters are learned from data; a handful of *simulator* parameters are not
-directly observable (overtaking probabilities/thresholds, the plausibility weight in
-selection). We tune those against backtest quality on a TRAIN fold of races and report
-the winning configuration's score on a disjoint HELD-OUT fold, so overfit settings are
-rejected by construction. Historical parameters are fit once and reused across trials
-(the tunables don't affect estimation), which keeps trials cheap.
+Objective = strategy-prediction quality (stop-count top-1, compound-set top-k, order
+top-k) on TRAIN folds of past dry races; the winning configuration is then scored once
+on the 2026 HOLD-OUT, so overfit settings are rejected by construction.
+
+Efficiency notes:
+* Training datasets are loaded once per fold cutoff and cached; each trial refits only
+  the lap model (fit-time knobs: cliff_rate / knee_percentile / offset_prior_weight).
+* Params are fit at each fold-year start (before=(year, 1)) rather than per race — a
+  slightly pessimistic but much cheaper approximation of the expanding window.
+* A driver subsample per race caps simulation cost.
+
+Run:  venv/bin/python -m strategy_sim2.tuning.optuna_tune --trials 25 --sims 80
 """
 from __future__ import annotations
 
 import copy
 
 import numpy as np
+import pandas as pd
 
-from strategy_sim2.params import circuit, estimate
+from strategy_sim2.data import session_filter
+from strategy_sim2.params import circuit, dataset
+from strategy_sim2.params.dnf import fit_dnf
+from strategy_sim2.params.estimate import ParameterSet
+from strategy_sim2.params.lapmodel import fit_lap_model
+from strategy_sim2.params.startline import fit_start
 from strategy_sim2.settings import load_settings
-from strategy_sim2.validation.backtest import backtest_race
+from strategy_sim2.validation.backtest import strategy_backtest_race
+
+_DATA_CACHE: dict = {}
 
 
-def _apply(cfg: dict, params: dict) -> dict:
+def _fold_data(cfg, before):
+    key = tuple(before)
+    if key not in _DATA_CACHE:
+        _DATA_CACHE[key] = (
+            dataset.training_laps(cfg, before=before),
+            dataset.training_results(cfg, before=before),
+            dataset.training_lap1(cfg, before=before),
+        )
+    return _DATA_CACHE[key]
+
+
+def _fit_for(cfg, before) -> ParameterSet:
+    laps, results, lap1 = _fold_data(cfg, before)
+    return ParameterSet(lap=fit_lap_model(laps, cfg), dnf=fit_dnf(results, cfg),
+                        start=fit_start(results, lap1, cfg),
+                        n_laps_rows=len(laps), n_result_rows=len(results))
+
+
+def _apply(cfg: dict, p: dict) -> dict:
     c = copy.deepcopy(cfg)
-    c["overtaking"]["pass_prob_easy"] = params["pass_prob_easy"]
-    c["overtaking"]["pass_prob_hard"] = params["pass_prob_hard"]
-    c["overtaking"]["threshold_easy"] = params["threshold_easy"]
-    c["overtaking"]["threshold_hard"] = params["threshold_hard"]
-    c["selection"]["prior_weight"] = params["prior_weight"]
+    c["params"]["cliff_rate"] = p["cliff_rate"]
+    c["params"]["knee_percentile"] = p["knee_percentile"]
+    c["params"]["offset_prior_weight"] = p["offset_prior_weight"]
+    c["generation"]["shortlist_prior_weight"] = p["shortlist_prior_weight"]
+    c["generation"]["undercut_shift_laps"] = p["undercut_shift_laps"]
+    c["selection"]["prior_weight"] = p["prior_weight"]
+    c["selection"]["stops_weight"] = p["stops_weight"]
+    c.setdefault("prior", {})
+    c["prior"]["start_blend_k"] = p["start_blend_k"]
+    c["prior"]["pattern_blend_k"] = p["pattern_blend_k"]
     return c
 
 
-def _score(rows: list[dict]) -> float:
-    """Higher is better: reward finish correlation and strategy recall."""
+def _score_rows(rows: list[dict]) -> float:
     if not rows:
         return -1e9
-    sp = np.nanmean([r["finish_spearman"] for r in rows])
-    rc = np.nanmean([r["recall_in_topk"] for r in rows])
-    return float(np.nan_to_num(sp) + np.nan_to_num(rc))
+    df = pd.DataFrame(rows)
+    stop = pd.to_numeric(df["stop1"]).mean()
+    setk = pd.to_numeric(df["set_topk"]).mean()
+    ordk = pd.to_numeric(df["ord_topk"]).mean()
+    return float(1.0 * stop + 1.0 * setk + 0.5 * ordk)
 
 
-def _fold_score(cfg, ps, profiles, year, rounds, n_sims) -> float:
-    rows = [backtest_race(year, r, ps, profiles, cfg, n_sims) for r in rounds]
-    return _score([r for r in rows if r])
+def _eval_fold(cfg, races: list[tuple[int, int]], n_sims: int,
+               max_drivers: int | None) -> float:
+    rows = []
+    fits: dict[int, ParameterSet] = {}
+    for year, rnd in races:
+        if year not in fits:
+            fits[year] = _fit_for(cfg, (year, 1))
+        ps = fits[year]
+        profiles = circuit.build_circuit_profiles(ps.lap, cfg, save=False, before=(year, 1))
+        rr = strategy_backtest_race(year, rnd, ps, profiles, cfg, n_sims)
+        if max_drivers and len(rr) > max_drivers:
+            rr = rr[:: max(1, len(rr) // max_drivers)][:max_drivers]
+        rows.extend(rr)
+    return _score_rows(rows)
 
 
-def tune(train_year: int, train_rounds: list[int], holdout_year: int,
-         holdout_rounds: list[int], param_years: list[int],
-         n_trials: int = 20, n_sims: int = 80, seed: int = 0):
+def _dry_races(cfg, year: int) -> list[tuple[int, int]]:
+    races = session_filter.included_races(cfg)
+    return [(year, int(r)) for r in races[races["year"] == year]["round"]]
+
+
+def tune(n_trials: int = 25, n_sims: int = 80, max_drivers: int = 10,
+         train_races: list[tuple[int, int]] | None = None,
+         holdout_races: list[tuple[int, int]] | None = None, seed: int = 0):
     import optuna
 
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
     cfg = load_settings()
-    ps = estimate.fit_all(cfg, years=param_years, use_cache=False)
-    profiles = circuit.build_circuit_profiles(ps.lap, cfg, save=False, years=param_years)
+    if train_races is None:  # spread across 2024+2025 for era coverage
+        r24, r25 = _dry_races(cfg, 2024), _dry_races(cfg, 2025)
+        train_races = r24[::4][:4] + r25[::4][:4]
+    if holdout_races is None:
+        holdout_races = _dry_races(cfg, 2026)
+    print(f"train fold: {train_races}\nholdout: {holdout_races}", flush=True)
 
     def objective(trial):
-        params = {
-            "pass_prob_easy": trial.suggest_float("pass_prob_easy", 0.4, 0.9),
-            "pass_prob_hard": trial.suggest_float("pass_prob_hard", 0.03, 0.3),
-            "threshold_easy": trial.suggest_float("threshold_easy", 0.0, 0.3),
-            "threshold_hard": trial.suggest_float("threshold_hard", 0.3, 1.2),
-            "prior_weight": trial.suggest_float("prior_weight", 0.0, 1.5),
+        p = {
+            "cliff_rate": trial.suggest_float("cliff_rate", 0.005, 0.08, log=True),
+            "knee_percentile": trial.suggest_float("knee_percentile", 60, 92),
+            "offset_prior_weight": trial.suggest_float("offset_prior_weight", 0.2, 0.9),
+            "shortlist_prior_weight": trial.suggest_float("shortlist_prior_weight", 1.0, 15.0),
+            "undercut_shift_laps": trial.suggest_float("undercut_shift_laps", 0.0, 5.0),
+            "prior_weight": trial.suggest_float("prior_weight", 0.2, 3.0),
+            "stops_weight": trial.suggest_float("stops_weight", 0.0, 2.0),
+            "start_blend_k": trial.suggest_float("start_blend_k", 3.0, 40.0, log=True),
+            "pattern_blend_k": trial.suggest_float("pattern_blend_k", 3.0, 40.0, log=True),
         }
-        return _fold_score(_apply(cfg, params), ps, profiles, train_year, train_rounds, n_sims)
+        s = _eval_fold(_apply(cfg, p), train_races, n_sims, max_drivers)
+        print(f"  trial {trial.number}: score={s:.3f} {p}", flush=True)
+        return s
 
-    optuna.logging.set_verbosity(optuna.logging.WARNING)
     study = optuna.create_study(direction="maximize",
                                 sampler=optuna.samplers.TPESampler(seed=seed))
     study.optimize(objective, n_trials=n_trials)
 
     best_cfg = _apply(cfg, study.best_params)
-    train_s = study.best_value
-    holdout_s = _fold_score(best_cfg, ps, profiles, holdout_year, holdout_rounds, n_sims)
-    print(f"best params: {study.best_params}")
-    print(f"train score={train_s:.3f}  holdout score={holdout_s:.3f}")
-    return study.best_params, train_s, holdout_s
+    base_hold = _eval_fold(cfg, holdout_races, n_sims, max_drivers)
+    best_hold = _eval_fold(best_cfg, holdout_races, n_sims, max_drivers)
+    print(f"\nbest params: {study.best_params}")
+    print(f"train score: {study.best_value:.3f}")
+    print(f"holdout: default-config={base_hold:.3f}  tuned={best_hold:.3f}")
+    return study.best_params, study.best_value, best_hold
 
 
 if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("--trials", type=int, default=20)
+    ap.add_argument("--trials", type=int, default=25)
     ap.add_argument("--sims", type=int, default=80)
-    ap.add_argument("--train-rounds", type=int, nargs="*", default=[1, 9])
-    ap.add_argument("--holdout-rounds", type=int, nargs="*", default=[1, 9])
+    ap.add_argument("--max-drivers", type=int, default=10)
     args = ap.parse_args()
-    # tune sim params on 2023 races (params from 2021-2022); report on 2024 races
-    tune(train_year=2023, train_rounds=args.train_rounds,
-         holdout_year=2024, holdout_rounds=args.holdout_rounds,
-         param_years=[2021, 2022], n_trials=args.trials, n_sims=args.sims)
+    tune(n_trials=args.trials, n_sims=args.sims, max_drivers=args.max_drivers)

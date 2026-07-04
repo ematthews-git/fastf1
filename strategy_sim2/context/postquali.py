@@ -74,7 +74,24 @@ def build_postquali_context(year: int, rnd: int, params: ParameterSet,
         base_pace.setdefault(d, med + 0.8)
 
     profile = get_profile(circuit, profiles, params.lap)
-    prior = build_strategy_prior(circuit, cfg)
+    # Expanding-window rule: the prior may only see races strictly before this one.
+    prior = build_strategy_prior(circuit, cfg, before=(year, rnd))
+
+    # Weekend practice/sprint long runs: this-weekend tyre behaviour + usage intent.
+    wcfg = cfg.get("weekend", {})
+    if wcfg.get("use_practice", True):
+        from dataclasses import replace as _dc_replace
+
+        from strategy_sim2.params.weekend import WeekendLapModel, fit_weekend
+
+        wt = fit_weekend(year, rnd, circuit, params.lap, cfg)
+        if wt is not None and wt.n_runs >= int(wcfg.get("min_runs", 6)):
+            params = _dc_replace(params, lap=WeekendLapModel(
+                params.lap, wt, k_laps=float(wcfg.get("k_weekend_laps", 60))))
+            prior.weekend_usage = dict(wt.n_laps)
+            prior.usage_alpha = float(wcfg.get("usage_alpha", 8.0))
+            prior.usage_weight = float(wcfg.get("usage_weight", 1.0))
+
     return WeekendContext(
         year=year, round=rnd, circuit=circuit, profile=profile, params=params,
         prior=prior, grid=grid, base_pace=base_pace, teams=teams,

@@ -31,18 +31,21 @@ def _cache_path(cfg: dict) -> Path:
 
 
 def fit_all(cfg: dict | None = None, use_cache: bool = True, rebuild: bool = False,
-            years: list[int] | None = None) -> ParameterSet:
-    """Fit all parameters. Pass ``years`` to restrict the training window (used for
-    out-of-sample backtests); year-restricted fits are never cached."""
+            years: list[int] | None = None,
+            before: tuple[int, int] | None = None) -> ParameterSet:
+    """Fit all parameters. ``years`` restricts to seasons; ``before=(year, round)``
+    applies the expanding-window cutoff (train only on races strictly before the
+    target). Restricted fits are never cached."""
     cfg = cfg or load_settings()
     path = _cache_path(cfg)
-    if years is None and use_cache and not rebuild and path.exists():
+    restricted = years is not None or before is not None
+    if not restricted and use_cache and not rebuild and path.exists():
         with open(path, "rb") as f:
             return pickle.load(f)
 
-    laps = dataset.training_laps(cfg, years=years)
-    results = dataset.training_results(cfg, years=years)
-    lap1 = dataset.training_lap1(cfg, years=years)
+    laps = dataset.training_laps(cfg, years=years, before=before)
+    results = dataset.training_results(cfg, years=years, before=before)
+    lap1 = dataset.training_lap1(cfg, years=years, before=before)
     if not len(laps) or not len(results):
         raise ValueError("no training data available; build the manifest/cache first")
 
@@ -53,7 +56,7 @@ def fit_all(cfg: dict | None = None, use_cache: bool = True, rebuild: bool = Fal
         n_laps_rows=int(len(laps)),
         n_result_rows=int(len(results)),
     )
-    if years is None:
+    if not restricted:
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "wb") as f:
             pickle.dump(ps, f)

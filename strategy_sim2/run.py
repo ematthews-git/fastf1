@@ -37,8 +37,10 @@ def run(mode: str, year: int, rnd: int, n_sims: int | None = None,
         raise ValueError(f"unknown mode: {mode}")
 
     pool = shortlist(
-        generate_candidates(wctx.profile, ps.lap, wctx.prior, wctx.allocation, cfg),
+        # wctx.params.lap may be the weekend-blended adapter, not the raw historical fit
+        generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
         k=int(cfg["generation"]["shortlist_k"]),
+        w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
     )
     if verbose:
         print(f"{wctx.circuit} {year} R{rnd} [{mode}]: {len(wctx.drivers())} drivers, "
@@ -50,7 +52,7 @@ def run(mode: str, year: int, rnd: int, n_sims: int | None = None,
     t0 = time.time()
     for i, d in enumerate(targets):
         finish, rtime = evaluate_driver(wctx, d, pool, n_sims, seed + i)
-        per_driver[d] = select(pool, finish, rtime, cfg, n_pos)
+        per_driver[d] = select(pool, finish, rtime, cfg, n_pos, wctx.prior)
         if verbose:
             best = per_driver[d][0]
             print(f"  {d:4s} grid {wctx.grid[d]:2d} -> "
