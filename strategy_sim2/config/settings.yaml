@@ -62,7 +62,9 @@ generation:
   max_stops: 3
   min_stint: 6            # minimum laps per stint when placing pit windows
   shortlist_k: 16         # candidates kept for Monte-Carlo evaluation (covers all families)
-  shortlist_prior_weight: 6.0  # plausibility weight in the shortlist score (tunable)
+  shortlist_prior_weight: 6.0  # history weight ranking WHICH families make the shortlist
+  shortlist_rep_prior_weight: 1.0  # lighter history weight picking the ORDER within a family
+  # (heavy prior over-favours a MEDIUM start even when it means ending on SOFT; economics lead)
   window_history_weight: 0.8   # MAX weight on observed windows (scales with history richness)
   window_history_k: 4.0        # observed windows needed to reach half of that weight
   undercut_shift_laps: 2.0     # analytic windows shifted earlier (undercut threat), tunable
@@ -93,10 +95,22 @@ prior:
   pattern_blend_k: 10.0    # circuit strategies to outweigh the recency-weighted global meta
 
 selection:
+  # The shown set is chosen to cover the most PLAUSIBILITY MASS under a fixed 5-slot
+  # display budget (fan site), not ranked by race-time optimum. q_i = prior^a * comp^b:
+  # history-led membership, sim competitiveness modulates; greedy submodular set-cover.
   min_candidates: 2
-  max_candidates: 5
-  prior_weight: 1.0        # weight on historical compound-pattern plausibility (tuned OOS)
-  stops_weight: 0.6        # extra weight on the historical stop-count distribution
+  max_candidates: 5         # fixed by the fan-site layout; NOT a coverage knob
+  # Tuned OOS (tuning/tune_selection.py, 2025 8-circuit subset; neutral on 2026 holdout):
+  # history dominates top-5 MEMBERSHIP; the sim's competitiveness barely helps set@k coverage
+  # (it mis-rates strategies) so comp_exp is ~0 — the sim still drives the shown finish
+  # distributions / tiers, just not which 5 strategies are shown.
+  plausibility_prior_exp: 2.39   # a: weight on the historical plausibility prior
+  plausibility_comp_exp: 0.014   # b: weight on Monte-Carlo competitiveness (softmin E[finish])
+  comp_temperature: 2.55         # tau: positions of E[finish] gap -> competitiveness scale
+  order_novelty: 0.588           # mass retained for a 2nd ordering of an already-shown set
+  clone_novelty: 0.299           # mass retained for a near-clone (same compound sequence)
+  comp_gate_positions: 12.14     # soft-drop strategies this many positions slower than the driver's best
+  tier_thresholds: [0.6, 0.2]    # q-ratio cuts -> Most likely / Alternative / Long-shot
   ci_lo: 5
   ci_hi: 95
 

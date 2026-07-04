@@ -1,10 +1,18 @@
 """Strategy selection (independent policy).
 
-Consumes evaluated outcome matrices plus the generation plausibility priors and returns
-the ranked 2-5 candidates a strategist would actually consider. The default policy ranks
-by expected finishing position with a small plausibility tiebreak, reports each option's
-probability of being optimal (from the common-random-number pairing), and enforces
-diversity so the shortlist shows genuinely different strategies rather than near-clones.
+The selection stage feeds a fan-facing page: it shows the ~5 strategies most likely to
+actually be *run* at the race, not the single race-time optimum. With a fixed display
+budget (the site has room for 5), the job is coverage of the plausible strategy space —
+so this policy chooses the set that captures the most **plausibility mass** rather than
+ranking near-identical optima.
+
+Plausibility of a candidate ``q_i`` blends the historical prior (what gets run at this
+circuit) with the driver-conditioned Monte-Carlo competitiveness (what is actually fast
+from this grid slot). The 5 slots are then filled by a greedy submodular set-cover: each
+pick adds the most plausibility mass not already represented, so distinct tyre-set /
+stop-count strategies are preferred and near-clones are suppressed. The trade between
+showing a second *ordering* of a likely set versus a fresh distinct strategy is decided
+automatically per race by whether that alternate order genuinely carries mass.
 
 Because selection is isolated, this policy can later become risk-averse, points-weighted
 or team-oriented without touching generation or evaluation.
@@ -25,6 +33,8 @@ class SelectedStrategy:
     outcome: Outcome
     p_optimal: float
     rank: int
+    tier: str = ""            # coarse fan-facing label: Most likely / Alternative / Long-shot
+    plausibility: float = 0.0  # normalised q_i (share of plausibility mass)
 
 
 def _family(c: Candidate) -> tuple:
@@ -34,52 +44,79 @@ def _family(c: Candidate) -> tuple:
 def select(pool: list[Candidate], finish: np.ndarray, rtime: np.ndarray,
            cfg: dict, n_positions: int, prior=None) -> list[SelectedStrategy]:
     K, S = finish.shape
-    sel = cfg.get("selection", {})
-    k_min = int(sel.get("min_candidates", 2))
-    k_max = int(sel.get("max_candidates", 5))
-    w_prior = float(sel.get("prior_weight", 0.3))
-    w_stops = float(sel.get("stops_weight", 0.6))
+    scfg = cfg.get("selection", {})
+    k_min = int(scfg.get("min_candidates", 2))
+    k_max = int(scfg.get("max_candidates", 5))
+    a = float(scfg.get("plausibility_prior_exp", 1.0))   # weight on historical prior
+    b = float(scfg.get("plausibility_comp_exp", 0.6))    # weight on sim competitiveness
+    tau = float(scfg.get("comp_temperature", 2.5))       # positions -> competitiveness scale
+    lam_order = float(scfg.get("order_novelty", 0.4))    # mass kept for a 2nd order of a set
+    lam_clone = float(scfg.get("clone_novelty", 0.05))   # mass kept for a near-clone
+    gate = float(scfg.get("comp_gate_positions", 8.0))   # soft-drop strategies this much slower
+    thr = list(scfg.get("tier_thresholds", [0.6, 0.2]))  # q-ratio cuts for the tier labels
+    t_hi = float(thr[0])
+    t_lo = float(thr[1]) if len(thr) > 1 else t_hi
 
     outcomes = [Outcome(finish[k], rtime[k]) for k in range(K)]
-    # Rank on expected finish given the driver finishes: DNF risk is ~strategy-independent
-    # here, so excluding it isolates the strategy effect and de-compresses the front.
     mean_fin = np.array([o.mean_finish_classified for o in outcomes])
-    priors = np.array([max(c.prior, 1e-9) for c in pool])
-    score = mean_fin - w_prior * np.log(priors)  # lower is better
-    # Extra weight on the historical stop-count distribution (corrects a one-stop bias;
-    # the naive "modal stop count" baseline beats pure economics on stop count).
-    if prior is not None:
-        score = score - w_stops * np.array(
-            [np.log(max(prior.stop_prior(c.n_stops), 1e-9)) for c in pool])
+    priors = np.array([max(c.prior, 1e-12) for c in pool])
+    e_min = float(np.min(mean_fin))
 
-    # P(optimal) via CRN pairing: per sim, the candidate giving the best finish.
+    # Plausibility mass q_i = prior^a * comp^b: history-led membership, sim competitiveness
+    # modulates. (An additive prior+comp hedge was tried and measured WORSE — it starved
+    # historically-normal-but-sim-mediocre strategies e.g. Mexico soft-medium, without fixing
+    # the sim-diluted cases; the product's prior floor keeps such strategies in the shown 5.)
+    # A soft gate down-weights strategies far slower than the driver's own best without
+    # hard-pruning, so recall of the realised strategy is preserved.
+    comp = np.exp(-(mean_fin - e_min) / max(tau, 1e-6))
+    pen = np.where((mean_fin - e_min) <= gate, 1.0, 1e-4)
+    q = (priors ** a) * (comp ** b) * pen
+    tot = float(q.sum())
+    q = q / tot if tot > 0 else np.full(K, 1.0 / K)
+
+    # P(optimal) via CRN pairing: per sim, the candidate giving the best finish. Kept as a
+    # secondary, fan-facing "which would have won" signal (no longer the ranking key).
     f = np.where(np.isnan(finish), n_positions + 1, finish)
-    best_per_sim = f.argmin(axis=0)
-    p_optimal = np.bincount(best_per_sim, minlength=K) / S
+    p_optimal = np.bincount(f.argmin(axis=0), minlength=K) / S
 
-    order = list(np.argsort(score))
+    # Greedy submodular coverage under the fixed K=k_max budget. gain(c|S) = q_c * novelty:
+    #   new (stop-count, tyre-set) cell -> 1.0 ; a 2nd ordering of a shown set -> lam_order ;
+    #   a near-clone (same sequence) -> lam_clone. Monotone submodular => greedy is near-optimal.
+    chosen: list[int] = []
+    cells: set[tuple] = set()
+    seqs: set[tuple] = set()
+    remaining = list(range(K))
+    while len(chosen) < min(k_max, K) and remaining:
+        best_i, best_gain = remaining[0], -1.0
+        for i in remaining:
+            if pool[i].compounds in seqs:
+                nov = lam_clone
+            elif _family(pool[i]) in cells:
+                nov = lam_order
+            else:
+                nov = 1.0
+            g = q[i] * nov
+            if g > best_gain:
+                best_gain, best_i = g, i
+        chosen.append(best_i)
+        cells.add(_family(pool[best_i]))
+        seqs.add(pool[best_i].compounds)
+        remaining.remove(best_i)
 
-    # Keep the best representative of each (n_stops, compound-multiset) family.
-    reps: dict[tuple, int] = {}
-    for i in order:
-        reps.setdefault(_family(pool[i]), i)
-    ranked = sorted(reps.values(), key=lambda i: score[i])
+    # Guarantee the display minimum even in a degenerate pool.
+    for i in remaining:
+        if len(chosen) >= k_min:
+            break
+        chosen.append(i)
 
-    chosen = ranked[:k_max]
-    # Guarantee at least two distinct stop counts if the field offers them.
-    stop_counts = {pool[i].n_stops for i in chosen}
-    if len(stop_counts) < 2:
-        for i in ranked:
-            if pool[i].n_stops not in stop_counts:
-                chosen[-1] = i
-                break
-    chosen = sorted(set(chosen), key=lambda i: score[i])[:k_max]
-    if len(chosen) < k_min:
-        for i in ranked:
-            if i not in chosen:
-                chosen.append(i)
-            if len(chosen) >= k_min:
-                break
+    # Display order + coarse plausibility tiers (relative to the most plausible shown).
+    chosen.sort(key=lambda i: -q[i])
+    q_top = q[chosen[0]] if chosen else 1.0
 
-    return [SelectedStrategy(pool[i], outcomes[i], float(p_optimal[i]), rank + 1)
-            for rank, i in enumerate(sorted(chosen, key=lambda i: score[i]))]
+    def tier(i: int) -> str:
+        r = q[i] / q_top if q_top > 0 else 0.0
+        return "Most likely" if r >= t_hi else "Alternative" if r >= t_lo else "Long-shot"
+
+    return [SelectedStrategy(pool[i], outcomes[i], float(p_optimal[i]), rank + 1,
+                             tier(i), float(q[i]))
+            for rank, i in enumerate(chosen)]

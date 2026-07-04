@@ -25,6 +25,8 @@ def _strategy_dict(s: SelectedStrategy, n_positions: int, cfg: dict) -> dict:
     dist = {str(p): _round(v, 4) for p, v in o.distribution(n_positions).items() if v > 0.0}
     return {
         "rank": s.rank,
+        "tier": s.tier,
+        "plausibility": _round(s.plausibility, 4),
         "n_stops": s.candidate.n_stops,
         "compounds": list(s.candidate.compounds),
         "start_compound": s.candidate.start_compound,

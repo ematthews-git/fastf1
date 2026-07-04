@@ -46,7 +46,8 @@ def backtest_race(year: int, rnd: int, ps, profiles, cfg, n_sims: int) -> dict |
     wctx = build_postquali_context(year, rnd, ps, profiles, cfg)
     pool = shortlist(generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
                      k=int(cfg["generation"]["shortlist_k"]),
-                     w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)))
+                     w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
+                     rep_prior_weight=float(cfg["generation"].get("shortlist_rep_prior_weight", 1.0)))
     pool_families = {(c.n_stops, tuple(sorted(c.compounds))) for c in pool}
     n_pos = len(wctx.drivers())
 
@@ -138,7 +139,8 @@ def strategy_backtest_race(year: int, rnd: int, ps, profiles, cfg,
     wctx = build_postquali_context(year, rnd, ps, profiles, cfg)
     pool = shortlist(generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
                      k=int(cfg["generation"]["shortlist_k"]),
-                     w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)))
+                     w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
+                     rep_prior_weight=float(cfg["generation"].get("shortlist_rep_prior_weight", 1.0)))
     pool_fams = {(c.n_stops, tuple(sorted(c.compounds))) for c in pool}
     n_pos = len(wctx.drivers())
 
@@ -203,35 +205,62 @@ def summarize_strategy(df: pd.DataFrame) -> None:
     print(per.round(0).to_string())
 
 
+def _strategy_race_job(test_year: int, rnd: int, n_sims: int, cfg: dict) -> list[dict]:
+    """Fit the expanding-window params for one test race and return its per-driver rows.
+    Module-level (picklable) so it can run in a worker process — each race is independent
+    (its own pre-race param fit + sim), so the full backtest parallelises across rounds."""
+    ps = estimate.fit_all(cfg, before=(test_year, rnd), use_cache=False)
+    profiles = circuit.build_circuit_profiles(ps.lap, cfg, save=False, before=(test_year, rnd))
+    return strategy_backtest_race(test_year, rnd, ps, profiles, cfg, n_sims)
+
+
 def run_strategy_backtest(test_year: int, rounds: list[int] | None = None,
                           n_sims: int = 200, out_csv: str | None = None,
-                          cfg: dict | None = None) -> pd.DataFrame:
+                          cfg: dict | None = None, workers: int = 5) -> pd.DataFrame:
     """Expanding-window strategy backtest: for each test race, parameters and priors are
-    fit on everything strictly BEFORE that race (incl. completed same-season rounds)."""
+    fit on everything strictly BEFORE that race (incl. completed same-season rounds).
+
+    Rounds are independent, so up to ``workers`` run concurrently in separate processes
+    (results are seed-fixed, so parallelism does not change them)."""
     import time as _time
+    from concurrent.futures import ProcessPoolExecutor, as_completed
 
     cfg = cfg or load_settings()
     races = session_filter.included_races(cfg)
     races = races[races["year"] == test_year].sort_values("round")
     if rounds is not None:
         races = races[races["round"].isin(rounds)]
+    round_list = [int(r["round"]) for _, r in races.iterrows()]
+    circuits = {int(r["round"]): str(r["circuit"]) for _, r in races.iterrows()}
 
     all_rows, t0 = [], _time.time()
-    for _, r in races.iterrows():
-        rnd = int(r["round"])
-        ps = estimate.fit_all(cfg, before=(test_year, rnd), use_cache=False)
-        profiles = circuit.build_circuit_profiles(ps.lap, cfg, save=False,
-                                                  before=(test_year, rnd))
-        rows = strategy_backtest_race(test_year, rnd, ps, profiles, cfg, n_sims)
-        all_rows.extend(rows)
-        print(f"{test_year}R{rnd} {r['circuit']}: {len(rows)} drivers "
-              f"[{_time.time()-t0:.0f}s]", flush=True)
+    n_workers = max(1, min(int(workers), len(round_list)))
+    if n_workers > 1:
+        with ProcessPoolExecutor(max_workers=n_workers) as ex:
+            futs = {ex.submit(_strategy_race_job, test_year, rnd, n_sims, cfg): rnd
+                    for rnd in round_list}
+            for fut in as_completed(futs):
+                rnd = futs[fut]
+                rows = fut.result()
+                all_rows.extend(rows)
+                print(f"{test_year}R{rnd} {circuits[rnd]}: {len(rows)} drivers "
+                      f"[{_time.time()-t0:.0f}s]", flush=True)
+    else:
+        for rnd in round_list:
+            rows = _strategy_race_job(test_year, rnd, n_sims, cfg)
+            all_rows.extend(rows)
+            print(f"{test_year}R{rnd} {circuits[rnd]}: {len(rows)} drivers "
+                  f"[{_time.time()-t0:.0f}s]", flush=True)
 
     df = pd.DataFrame(all_rows)
-    if out_csv and len(df):
-        df.to_csv(out_csv, index=False)
     if len(df):
-        summarize_strategy(df)
+        print(f"\n[{n_workers} workers, {_time.time()-t0:.0f}s total]")
+        summarize_strategy(df)          # print results FIRST so a bad path can't lose the run
+    if out_csv and len(df):
+        from pathlib import Path
+        Path(out_csv).parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(out_csv, index=False)
+        print(f"wrote {out_csv}")
     return df
 
 
@@ -245,9 +274,10 @@ if __name__ == "__main__":
     ap.add_argument("--max-races", type=int, default=5)
     ap.add_argument("--sims", type=int, default=120)
     ap.add_argument("--out-csv", type=str, default=None)
+    ap.add_argument("--workers", type=int, default=5, help="parallel rounds (strategy mode)")
     args = ap.parse_args()
     if args.strategy:
         run_strategy_backtest(args.test_year, rounds=args.rounds, n_sims=args.sims,
-                              out_csv=args.out_csv)
+                              out_csv=args.out_csv, workers=args.workers)
     else:
         run_backtest(args.test_year, max_races=args.max_races, n_sims=args.sims)

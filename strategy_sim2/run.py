@@ -41,6 +41,7 @@ def run(mode: str, year: int, rnd: int, n_sims: int | None = None,
         generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
         k=int(cfg["generation"]["shortlist_k"]),
         w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
+        rep_prior_weight=float(cfg["generation"].get("shortlist_rep_prior_weight", 1.0)),
     )
     if verbose:
         print(f"{wctx.circuit} {year} R{rnd} [{mode}]: {len(wctx.drivers())} drivers, "

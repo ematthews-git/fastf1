@@ -142,7 +142,8 @@ def generate_candidates(circuit_profile: CircuitProfile, lap_model: LapModel,
     return candidates
 
 
-def shortlist(candidates: list[Candidate], k: int = 16, w_prior: float = 6.0) -> list[Candidate]:
+def shortlist(candidates: list[Candidate], k: int = 16, w_prior: float = 6.0,
+              rep_prior_weight: float = 1.0) -> list[Candidate]:
     """Trim to <=k candidates while guaranteeing FAMILY coverage.
 
     A family is (n_stops, compound multiset). Diagnosis showed hard-heavy families
@@ -151,17 +152,29 @@ def shortlist(candidates: list[Candidate], k: int = 16, w_prior: float = 6.0) ->
     the best variant of EVERY rule-legal family (the allocation rule keeps the family
     count ~16), ranked by blended cost+prior score; only if families exceed k do the
     lowest-scoring drop.
+
+    Two *different* prior weights are used on purpose:
+      * ``w_prior`` (heavy) ranks WHICH families make the shortlist — history should keep
+        off-meta-but-real families in.
+      * ``rep_prior_weight`` (light) picks the representative ORDER *within* a family. The
+        heavy prior over-favours a MEDIUM start even when that means ENDING ON SOFT (e.g.
+        MEDIUM-SOFT over SOFT-MEDIUM), and the sim then rates that ends-on-soft order badly,
+        burying an otherwise-realistic family. Letting economics (the cliff already punishes
+        ending on soft) lead the order choice yields the order teams actually run.
     """
     if not candidates:
         return []
     best_cost = min(c.analytic_cost for c in candidates)
 
-    def score(c: Candidate) -> float:
+    def fam_score(c: Candidate) -> float:  # ranks families for inclusion (history-heavy)
         return (c.analytic_cost - best_cost) - w_prior * math.log(max(c.prior, 1e-9))
+
+    def rep_score(c: Candidate) -> float:  # picks the order within a family (economics-led)
+        return (c.analytic_cost - best_cost) - rep_prior_weight * math.log(max(c.prior, 1e-9))
 
     families: dict[tuple, Candidate] = {}
     for c in candidates:
         f = (c.n_stops, tuple(sorted(c.compounds)))
-        if f not in families or score(c) < score(families[f]):
-            families[f] = c  # best variant per family (prior incl. order terms decides ties)
-    return sorted(families.values(), key=score)[:k]
+        if f not in families or rep_score(c) < rep_score(families[f]):
+            families[f] = c  # most plausible ORDER of this family (economics-led)
+    return sorted(families.values(), key=fam_score)[:k]
