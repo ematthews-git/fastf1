@@ -54,7 +54,7 @@ def run(mode: str, year: int, rnd: int, n_sims: int | None = None,
                   f"{'-'.join(x[0] for x in best.candidate.compounds):8s} "
                   f"E[fin]={best.outcome.mean_finish_classified:.2f}  [{time.time()-t0:.0f}s]")
 
-    report = build_report(wctx, per_driver, n_sims, seed, cfg)
+    report = build_report(wctx, per_driver, n_sims, seed, cfg, profiles=profiles)
     path = write_report(report, year, rnd, mode, cfg)
     if verbose:
         print(f"wrote {path}  [{time.time()-t0:.0f}s total]")

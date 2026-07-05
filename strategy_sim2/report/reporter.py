@@ -11,6 +11,7 @@ import json
 from datetime import datetime, timezone
 
 from strategy_sim2.context.postquali import WeekendContext
+from strategy_sim2.report.stats import aggregate_driver, race_stats
 from strategy_sim2.selection.selector import SelectedStrategy
 from strategy_sim2.settings import load_settings, resolve_path
 
@@ -49,18 +50,31 @@ def _strategy_dict(s: SelectedStrategy, n_positions: int, cfg: dict) -> dict:
 
 
 def build_report(wctx: WeekendContext, per_driver: dict[str, list[SelectedStrategy]],
-                 n_sims: int, seed: int, cfg: dict | None = None) -> dict:
+                 n_sims: int, seed: int, cfg: dict | None = None,
+                 profiles: dict | None = None) -> dict:
     cfg = cfg or load_settings()
     p = wctx.profile
     n_pos = len(wctx.drivers())
+
+    # Derived fan-facing stats — a pure read over the already-computed outcomes / params
+    # (see report/stats.py); does not affect any prediction.
+    driver_agg = {d: aggregate_driver(d, per_driver.get(d, []), wctx.grid[d],
+                                      wctx.params.dnf, wctx.params.lap, wctx.circuit)
+                  for d in wctx.drivers()}
+
     drivers = {}
     for d in wctx.drivers():
-        drivers[d] = {
+        entry = {
             "grid": wctx.grid[d],
             "team": wctx.teams.get(d, ""),
             "base_pace_s": _round(wctx.base_pace.get(d), 3),
             "candidates": [_strategy_dict(s, n_pos, cfg) for s in per_driver.get(d, [])],
         }
+        agg = driver_agg.get(d)
+        if agg:
+            entry.update({k: v for k, v in agg.items() if not k.startswith("_")})
+        drivers[d] = entry
+
     return {
         "meta": {
             "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -78,6 +92,7 @@ def build_report(wctx: WeekendContext, per_driver: dict[str, list[SelectedStrate
             "overtaking_difficulty": _round(p.overtaking_difficulty, 2),
             "n_races_in_history": p.n_races, "fallback": p.fallback,
         },
+        "race_stats": race_stats(wctx, driver_agg, profiles, cfg),
         "drivers": drivers,
     }
 

@@ -53,19 +53,21 @@ Race context ─────────────┤                         
                           │               → per-candidate finish distribution │    <mode>.json
                           │                          │                       │
                           │                          ▼                       │    per driver: ranked 2–5
-                          │  selection/   plausibility-mass set-cover → 2–5  │    candidates, each with:
-                          │               tiers, P(optimal), order diversity  │     • compounds + order
-                          │                          │                       │     • planned pit laps +
-                          │                          ▼                       │       window ranges
-                          │  report/      JSON for the strategy page          │     • expected_finish,
-                          └──────────────────────────────────────────────────┘       finish_distribution,
-                                                                                      CI, p_win/podium/
-  expanding-window rule: params + priors only ever see races STRICTLY BEFORE            points/dnf
-  the target race — the backtest has no leakage.                                      • p_optimal, tier,
-                                                                                        plausibility
-                                                                              + meta (mode, seed, sims,
-                                                                                training window) and the
-                                                                                derived circuit_profile
+                          │  selection/   plausibility-mass set-cover → 2–5  │    candidates + derived
+                          │               tiers, P(optimal), order diversity  │    stats (each candidate:
+                          │                          │                       │     compounds+order, pit
+                          │                          ▼                       │     laps+windows, expected
+                          │  report/      JSON: strategies + race_stats +     │     finish, distribution,
+                          │               per-driver derived numbers          │     CI, p_win/podium/points
+                          └──────────────────────────────────────────────────┘     /dnf, p_optimal, tier)
+                                                                              + race_stats (tyre life,
+  expanding-window rule: params + priors only ever see races STRICTLY BEFORE    compound deltas, undercut,
+  the target race — the backtest has no leakage.                                deg rank, SC/VSC, overtaking,
+                                                                                stop split, chaos, pole-win)
+  Derived stats are a pure read over the sim outputs + fitted params —        + per-driver win/podium/points,
+  they never re-simulate or re-select, so they cannot change predictions.       projected finish + grid mover,
+                                                                                reliability, tyre management
+                                                                              + meta and circuit_profile
 ```
 
 **Inputs, in full**
@@ -79,11 +81,28 @@ Race context ─────────────┤                         
 | **Race context** | *postquali*: grid, qualifying pace, entry list, teams, this weekend's practice long-runs. *prelim* (pre-weekend): current-season form, grid = rank of predicted pace |
 
 **Output** — one JSON file per race (`output/<year>_<round>_<mode>.json`): run `meta`, the derived
-`circuit_profile`, and per driver a ranked list of 2–5 candidates. Each candidate carries the
-compound sequence and start compound, planned pit laps and observed-window ranges, stint lengths,
-`expected_finish` (given the driver finishes) and `expected_finish_all` (incl. DNF sims), the full
-`finish_distribution` with CI, `p_win/p_podium/p_points/p_dnf`, `p_optimal`, `tier`
-(Most likely / Alternative / Long-shot) and its `plausibility` share.
+`circuit_profile`, a `race_stats` block, and per driver a ranked list of 2–5 candidates plus
+driver-level derived numbers. Each candidate carries the compound sequence and start compound,
+planned pit laps and observed-window ranges, stint lengths, `expected_finish` (given the driver
+finishes) and `expected_finish_all` (incl. DNF sims), the full `finish_distribution` with CI,
+`p_win/p_podium/p_points/p_dnf`, `p_optimal`, `tier` (Most likely / Alternative / Long-shot) and
+its `plausibility` share.
+
+**Derived stats** (a pure, read-only repackaging of the sim outputs and fitted parameters — they
+never re-simulate, re-select or re-fit, so they cannot change any prediction):
+
+- **`race_stats`** — `tyre_life_laps` (usable laps to the cliff, per compound), `compound_pace_s_vs_medium`
+  (negative = faster), `undercut_s_per_lap` (fresh-vs-worn medium), `pit_loss_s`, `degradation`
+  (severity + rank among all circuits), `safety_car_prob` / `vsc_prob` / `expected_sc_vsc_laps`,
+  `overtaking_difficulty_0to100`, `expected_on_track_passes`, `stop_count_distribution` +
+  `most_likely_stops`, `chaos_index_0to100` (field-wide finish-spread), `pole_to_win_prob`.
+- **Per driver** — plausibility-weighted `p_win` / `p_podium` / `p_points`, `expected_finish`,
+  `projected_finish` and `grid_to_finish_delta` (the grid "mover"), `dnf_prob` (reliability), and
+  `tyre_management_vs_field` (+ = kinder on tyres than the field).
+
+Ordinal outputs (projected order, movers, head-to-heads) track well (OOS finish Spearman ≈ 0.74);
+absolute probabilities inherit the sim's hand-set overtaking/SC calibration, so treat `p_win`,
+`pole_to_win_prob` and `expected_on_track_passes` as directional until those params are fit.
 
 ## Pipeline (module by module)
 
