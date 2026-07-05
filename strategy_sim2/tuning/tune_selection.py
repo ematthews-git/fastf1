@@ -24,9 +24,9 @@ import pandas as pd
 from strategy_sim2.context.postquali import build_postquali_context
 from strategy_sim2.data import clean, collector, session_filter
 from strategy_sim2.evaluation.monte_carlo import evaluate_driver
-from strategy_sim2.generation.generator import generate_candidates, shortlist
+from strategy_sim2.generation.generator import build_pool
 from strategy_sim2.params import circuit, estimate
-from strategy_sim2.selection.selector import select, _family
+from strategy_sim2.selection.selector import field_display, plausibility_mass, select, _family
 from strategy_sim2.settings import load_settings, resolve_path
 from strategy_sim2.validation.backtest import actual_strategies
 
@@ -42,10 +42,7 @@ def _sim_race(year: int, rnd: int, ps, profiles, cfg, n_sims: int) -> list[dict]
     classified = {str(x["driver"]) for _, x in res.iterrows() if x["classified"]}
 
     wctx = build_postquali_context(year, rnd, ps, profiles, cfg)
-    pool = shortlist(generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
-                     k=int(cfg["generation"]["shortlist_k"]),
-                     w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
-                     rep_prior_weight=float(cfg["generation"].get("shortlist_rep_prior_weight", 1.0)))
+    pool = build_pool(wctx, cfg)
     pool_fams = {_family(c) for c in pool}
     n_pos = len(wctx.drivers())
     out = []
@@ -54,7 +51,8 @@ def _sim_race(year: int, rnd: int, ps, profiles, cfg, n_sims: int) -> list[dict]
             continue
         fin, rt = evaluate_driver(wctx, d, pool, n_sims, int(cfg["simulation"]["seed"]) + i)
         a = actual[d]
-        out.append({"pool": pool, "finish": fin, "rtime": rt, "n_pos": n_pos,
+        out.append({"race": f"{year}R{rnd}", "pool": pool, "finish": fin, "rtime": rt,
+                    "n_pos": n_pos,
                     "a_set": tuple(sorted(a["compounds"])), "a_seq": tuple(a["compounds"]),
                     "a_stops": a["n_stops"], "in_short": a["family"] in pool_fams})
     return out
@@ -78,8 +76,14 @@ def _apply_selection(cfg: dict, p: dict) -> dict:
     return c
 
 
-def _score(cache: list[dict], cfg: dict) -> dict:
+def _score(cache: list[dict], cfg: dict, near_margin: int = 2) -> dict:
+    """Per-driver metrics (continuity) + the race-level PRODUCT metric: is the race's
+    modal ordered strategy (or a near-tied second) in the field-aggregated shown 5?"""
+    from collections import Counter, defaultdict
+
     setk = ordk = stop1 = set1 = 0
+    by_race: dict[str, list[dict]] = defaultdict(list)
+    q_race: dict[str, np.ndarray] = {}
     for r in cache:
         sel = select(r["pool"], r["finish"], r["rtime"], cfg, r["n_pos"])
         sets = {tuple(sorted(s.candidate.compounds)) for s in sel}
@@ -88,14 +92,37 @@ def _score(cache: list[dict], cfg: dict) -> dict:
         ordk += r["a_seq"] in seqs
         stop1 += sel[0].candidate.n_stops == r["a_stops"]
         set1 += tuple(sorted(sel[0].candidate.compounds)) == r["a_set"]
+        q_d, _, _ = plausibility_mass(r["pool"], r["finish"], r["rtime"], cfg, r["n_pos"])
+        q_race[r["race"]] = q_race.get(r["race"], 0.0) + q_d
+        by_race[r["race"]].append(r)
+
+    modal_ord = modal_set = 0
+    for race, rs in by_race.items():
+        pool = rs[0]["pool"]
+        idx = field_display(pool, q_race[race] / len(rs), cfg)
+        shown_seq = {pool[i].compounds for i in idx}
+        shown_set = {tuple(sorted(pool[i].compounds)) for i in idx}
+        counts = Counter(r["a_seq"] for r in rs).most_common()
+        modal, modal_n = counts[0]
+        targets = [modal]
+        if len(counts) > 1 and counts[1][1] >= modal_n - near_margin:
+            targets.append(counts[1][0])
+        modal_ord += any(t in shown_seq for t in targets)
+        modal_set += any(tuple(sorted(t)) in shown_set for t in targets)
+
     n = max(1, len(cache))
+    nr = max(1, len(by_race))
     return {"setk": 100 * setk / n, "ordk": 100 * ordk / n,
-            "stop1": 100 * stop1 / n, "set1": 100 * set1 / n}
+            "stop1": 100 * stop1 / n, "set1": 100 * set1 / n,
+            "modal_ord": 100 * modal_ord / nr, "modal_set": 100 * modal_set / nr}
 
 
 def tune(year: int = 2025, rounds: list[int] | None = None, n_sims: int = 200,
          n_trials: int = 400, seed: int = 0, cfg: dict | None = None,
-         w_setk: float = 1.0, w_ordk: float = 0.5) -> dict:
+         w_modal_set: float = 0.25, w_tiebreak: float = 0.02) -> dict:
+    """Objective = race-level modal_ord@5 (the product metric) + w_modal_set * modal_set@5,
+    with a small per-driver ord/set tiebreak so trials aren't flat between the coarse
+    race-level steps (8 tuning races -> 12.5% quanta)."""
     import optuna
 
     optuna.logging.set_verbosity(optuna.logging.WARNING)
@@ -105,7 +132,7 @@ def tune(year: int = 2025, rounds: list[int] | None = None, n_sims: int = 200,
                   .query("year == @year")["round"]]
 
     cache_path = resolve_path(cfg["data"]["derived_dir"]) / f"seltune_{year}_{n_sims}.pkl"
-    key = (year, tuple(sorted(rounds)), n_sims)
+    key = ("v2", year, tuple(sorted(rounds)), n_sims)  # v2: payload gained the race key
     if cache_path.exists():
         saved = pickle.load(open(cache_path, "rb"))
         cache = saved["cache"] if saved.get("key") == key else None
@@ -118,9 +145,13 @@ def tune(year: int = 2025, rounds: list[int] | None = None, n_sims: int = 200,
         pickle.dump({"key": key, "cache": cache}, open(cache_path, "wb"))
     print(f"cache: {len(cache)} driver-races\n", flush=True)
 
+    def fmt(m: dict) -> str:
+        return (f"modal_ord={m['modal_ord']:.1f} modal_set={m['modal_set']:.1f} | "
+                f"setk={m['setk']:.1f} ordk={m['ordk']:.1f} "
+                f"set1={m['set1']:.1f} stop1={m['stop1']:.1f}")
+
     base = _score(cache, cfg)
-    print(f"baseline (current cfg): setk={base['setk']:.1f} ordk={base['ordk']:.1f} "
-          f"set1={base['set1']:.1f} stop1={base['stop1']:.1f}", flush=True)
+    print(f"baseline (current cfg): {fmt(base)}", flush=True)
 
     def objective(trial):
         p = {
@@ -132,7 +163,8 @@ def tune(year: int = 2025, rounds: list[int] | None = None, n_sims: int = 200,
             "clone_novelty": trial.suggest_float("clone_novelty", 0.0, 0.3),
         }
         m = _score(cache, _apply_selection(cfg, p))
-        return w_setk * m["setk"] + w_ordk * m["ordk"]
+        return (m["modal_ord"] + w_modal_set * m["modal_set"]
+                + w_tiebreak * (m["ordk"] + m["setk"]))
 
     study = optuna.create_study(direction="maximize",
                                 sampler=optuna.samplers.TPESampler(seed=seed))
@@ -140,8 +172,8 @@ def tune(year: int = 2025, rounds: list[int] | None = None, n_sims: int = 200,
     study.optimize(objective, n_trials=n_trials)
     best = _score(cache, _apply_selection(cfg, study.best_params))
     print(f"\n{n_trials} trials in {time.time()-t0:.0f}s")
-    print(f"baseline : setk={base['setk']:.1f} ordk={base['ordk']:.1f} set1={base['set1']:.1f} stop1={base['stop1']:.1f}")
-    print(f"tuned    : setk={best['setk']:.1f} ordk={best['ordk']:.1f} set1={best['set1']:.1f} stop1={best['stop1']:.1f}")
+    print(f"baseline : {fmt(base)}")
+    print(f"tuned    : {fmt(best)}")
     print(f"best params: {study.best_params}")
     return {"baseline": base, "tuned": best, "params": study.best_params}
 

@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from strategy_sim2.data import collector, session_filter
+from strategy_sim2.data import collector, schema, session_filter
 from strategy_sim2.data.schema import DRY_COMPOUNDS
 from strategy_sim2.settings import load_settings, resolve_path
 
@@ -57,7 +57,10 @@ def get_clean_race(year: int, rnd: int, cfg: dict | None = None,
     cfg = cfg or load_settings()
     path = _derived_path(cfg, year, rnd)
     if use_cache and path.exists():
-        return pd.read_pickle(path)
+        df = pd.read_pickle(path)
+        # Older caches predate circuit-name normalisation (Monaco vs Monte Carlo).
+        df["circuit"] = df["circuit"].map(schema.normalize_circuit)
+        return df
     ses = collector.load_session(year, rnd, "R", weather=False, messages=False)
     if ses is None:
         return None

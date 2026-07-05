@@ -83,7 +83,7 @@ def session_laps(ses) -> pd.DataFrame:
     out = pd.DataFrame({
         "year": int(ev["EventDate"].year),
         "round": int(ev["RoundNumber"]),
-        "circuit": str(ev["Location"]),
+        "circuit": schema.normalize_circuit(ev["Location"]),
         "event_format": str(ev["EventFormat"]),
         "session": str(ses.name),
         "driver": laps["Driver"].astype("string"),
@@ -162,7 +162,7 @@ def session_results(ses) -> pd.DataFrame:
     out = pd.DataFrame({
         "year": int(ev["EventDate"].year),
         "round": int(ev["RoundNumber"]),
-        "circuit": str(ev["Location"]),
+        "circuit": schema.normalize_circuit(ev["Location"]),
         "driver": res["Abbreviation"].astype("string"),
         "team": res["TeamName"].astype("string"),
         "grid": res["GridPosition"].astype("float"),
@@ -198,7 +198,7 @@ def session_meta(ses) -> schema.SessionMeta:
         year=int(ev["EventDate"].year),
         round=int(ev["RoundNumber"]),
         session=str(ses.name),
-        circuit=str(ev["Location"]),
+        circuit=schema.normalize_circuit(ev["Location"]),
         event_name=str(ev["EventName"]),
         event_format=str(ev["EventFormat"]),
         event_date=str(ev["EventDate"].date()),

@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pickle
 
-from strategy_sim2.params import dataset
+from strategy_sim2.params import dataset, nominations
 from strategy_sim2.params.dnf import DNFModel, fit_dnf
 from strategy_sim2.params.lapmodel import LapModel, fit_lap_model
 from strategy_sim2.params.startline import StartModel, fit_start
@@ -48,6 +48,14 @@ def fit_all(cfg: dict | None = None, use_cache: bool = True, rebuild: bool = Fal
     lap1 = dataset.training_lap1(cfg, years=years, before=before)
     if not len(laps) or not len(results):
         raise ValueError("no training data available; build the manifest/cache first")
+
+    # Nomination-aware translation: compound labels of historical laps are mapped into
+    # the TARGET year's label space per circuit (Pirelli C-numbers), so the deg/knee
+    # fits describe the tyres actually nominated for the target season. The unrestricted
+    # fit is cached — pass rebuild=True after changing target.year in settings.
+    target_year = before[0] if before else int(cfg.get("target", {}).get("year", 0))
+    if target_year:
+        laps = nominations.relabel_laps(laps, target_year, cfg)
 
     ps = ParameterSet(
         lap=fit_lap_model(laps, cfg),

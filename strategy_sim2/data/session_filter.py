@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from strategy_sim2.data import collector
+from strategy_sim2.data import collector, schema
 from strategy_sim2.data.schema import WET_COMPOUNDS
 from strategy_sim2.settings import load_settings, resolve_path
 
@@ -96,7 +96,11 @@ def load_manifest(cfg: dict | None = None) -> pd.DataFrame:
         return pd.DataFrame()
     with open(path) as f:
         payload = json.load(f)
-    return pd.DataFrame(payload["sessions"])
+    m = pd.DataFrame(payload["sessions"])
+    if "circuit" in m.columns:
+        # Older manifests predate circuit-name normalisation (Monaco vs Monte Carlo).
+        m["circuit"] = m["circuit"].map(schema.normalize_circuit)
+    return m
 
 
 def included_races(cfg: dict | None = None) -> pd.DataFrame:

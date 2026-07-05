@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>strategy_sim2 — model flow & failure map</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c232c; --line:#30363d;
+    --ink:#e6edf3; --dim:#8b949e; --accent:#e10600; /* F1 red */
+    --ok:#2ea043; --warn:#d29922; --bad:#f85149; --info:#3b82f6;
+    --pill:#21262d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  a{color:var(--info)}
+  header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0d1117 70%,rgba(13,17,23,.85));
+    border-bottom:1px solid var(--line);padding:14px 22px;backdrop-filter:blur(4px)}
+  header h1{margin:0;font-size:18px;letter-spacing:.3px}
+  header h1 b{color:var(--accent)}
+  header .sub{color:var(--dim);font-size:12.5px;margin-top:3px}
+  .legend{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap;font-size:12px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px}
+  .grid{display:grid;grid-template-columns:1.55fr 1fr;gap:22px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:var(--dim);
+     margin:26px 0 12px;border-bottom:1px solid var(--line);padding-bottom:6px}
+
+  /* pipeline */
+  .stage{position:relative;background:var(--panel);border:1px solid var(--line);
+    border-left:4px solid var(--edge,var(--line));border-radius:10px;margin:0 0 8px;overflow:hidden}
+  .stage .head{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;user-select:none}
+  .stage .head:hover{background:var(--panel2)}
+  .idx{flex:0 0 26px;height:26px;border-radius:50%;background:var(--pill);border:1px solid var(--line);
+    display:grid;place-items:center;font-size:12px;color:var(--dim);font-weight:700}
+  .stage .name{font-weight:700;font-size:14.5px}
+  .stage .role{color:var(--dim);font-size:12px}
+  .badge{margin-left:auto;font-size:11px;padding:3px 9px;border-radius:20px;white-space:nowrap;font-weight:600}
+  .b-ok{background:rgba(46,160,67,.15);color:#5ad16f;border:1px solid rgba(46,160,67,.4)}
+  .b-warn{background:rgba(210,153,34,.15);color:#e3b341;border:1px solid rgba(210,153,34,.4)}
+  .b-bad{background:rgba(248,81,73,.15);color:#ff7b72;border:1px solid rgba(248,81,73,.45)}
+  .stage .body{display:none;padding:2px 16px 16px 16px;border-top:1px solid var(--line)}
+  .stage.open .body{display:block}
+  .stage .body h4{margin:14px 0 6px;font-size:11.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--dim)}
+  code,.mono{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+  .files code{background:var(--pill);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin:0 4px 4px 0;display:inline-block;color:#c9d1d9}
+  .knobs{display:flex;flex-wrap:wrap;gap:6px}
+  .knob{background:#0e1622;border:1px solid #21324a;color:#9ecbff;border-radius:5px;padding:2px 7px;font-size:11.5px}
+  .fail{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.3);border-radius:8px;padding:10px 12px;margin-top:8px}
+  .fail.warn{background:rgba(210,153,34,.08);border-color:rgba(210,153,34,.3)}
+  .fail b{color:#ff7b72}
+  .fail.warn b{color:#e3b341}
+  .fail .ev{color:var(--dim);font-size:12px;margin-top:4px}
+  .arrow{height:20px;display:grid;place-items:center;color:var(--line)}
+  .arrow .flow{font-size:11px;color:var(--dim);background:var(--panel);border:1px solid var(--line);
+    border-radius:20px;padding:1px 10px}
+  .arrow .flow b{color:#9ecbff;font-family:"SF Mono",monospace}
+
+  /* side panels */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+  .card h3{margin:0 0 10px;font-size:13.5px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+  td.n{font-family:"SF Mono",monospace;text-align:right}
+  .big{font-size:12px}
+  .barrow{display:flex;align-items:center;gap:8px;margin:7px 0}
+  .barrow .lbl{width:120px;color:var(--dim);font-size:11.5px}
+  .bar{flex:1;height:16px;background:#0b0f14;border:1px solid var(--line);border-radius:4px;position:relative;overflow:hidden}
+  .bar > i{position:absolute;left:0;top:0;bottom:0;display:block}
+  .seg-shown{background:var(--ok)}
+  .seg-skip{background:var(--bad)}
+  .seg-gen{background:var(--warn)}
+  .barrow .val{width:46px;text-align:right;font-family:"SF Mono",monospace;font-size:11.5px}
+  .hot{border-left:4px solid var(--bad);background:var(--panel);border-radius:8px;padding:11px 14px;margin-bottom:10px}
+  .hot.amber{border-color:var(--warn)}
+  .hot h4{margin:0 0 4px;font-size:13.5px}
+  .hot .where{font-size:11.5px;color:var(--dim)}
+  .hot p{margin:6px 0 0;font-size:12.5px;color:#c9d1d9}
+  .rank{display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;border-radius:5px;
+    background:var(--accent);color:#fff;font-weight:700;font-size:11px;margin-right:6px}
+  .foot{color:var(--dim);font-size:11.5px;margin-top:20px;text-align:center}
+  .kbd{background:var(--pill);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:11px}
+  .note{color:var(--dim);font-size:12px;margin:-4px 0 10px}
+</style>
+</head>
+<body>
+<header>
+  <h1><b>strategy_sim2</b> — model flow &amp; failure map</h1>
+  <div class="sub">Full pipeline data → params → generation → simulation → selection → report. Click any stage to expand mechanism, config knobs, and where it breaks. Health as of the current tuned config.</div>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--ok)"></i>healthy</span>
+    <span><i class="dot" style="background:var(--warn)"></i>weak / limiting</span>
+    <span><i class="dot" style="background:var(--bad)"></i>broken / prime suspect</span>
+    <span style="color:var(--dim)">· tip: <span class="kbd">click a stage</span> to drill in</span>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="grid">
+
+<!-- LEFT: pipeline -->
+<div>
+  <h2>Pipeline (expanding-window, no leakage)</h2>
+
+  <!-- 1 DATA -->
+  <div class="stage" style="--edge:var(--ok)">
+    <div class="head"><span class="idx">1</span>
+      <div><div class="name">data — collect &amp; extract</div>
+        <div class="role">FastF1 sessions → dry filter → clean laps → realised strategies</div></div>
+      <span class="badge b-ok">ok</span></div>
+    <div class="body">
+      <p>Pulls FastF1 race/practice data, auto-excludes wet/mixed sessions (logged to <code class="mono">manifest.json</code>), builds clean green-flag laps, and extracts each driver's <b>realised strategy</b> — merging red-flag / safety-car stint flurries (<code class="mono">min_strategic_stint</code>). This extraction is also the <b>ground truth</b> the backtest scores against.</p>
+      <h4>Files</h4><div class="files"><code>data/collector.py</code><code>clean.py</code><code>session_filter.py</code><code>strategy.py</code><code>backfill.py</code></div>
+      <h4>Knobs</h4><div class="knobs"><span class="knob">min_strategic_stint 5</span><span class="knob">recency_decay 0.7</span></div>
+      <div class="fail warn"><b>Watch:</b> stint-merging defines ground truth. Monaco-style red-flag races produce 4–7 "stops" that no pace model predicts; the extractor merges flurries but the tail is noisy. <div class="ev">Evidence: earlier a stint-extractor bug collapsed repeat-compound stops (M-H-H→M-H), corrupting ground truth — since fixed.</div></div>
+    </div>
+  </div>
+  <div class="arrow"><span class="flow">clean laps · realised strategies</span></div>
+
+  <!-- 2 PARAMS -->
+  <div class="stage" style="--edge:var(--bad)">
+    <div class="head"><span class="idx">2</span>
+      <div><div class="name">params — lap / deg / DNF / start</div>
+        <div class="role">joint fuel+tyre model, deg cliff, compound offsets, circuit profiles</div></div>
+      <span class="badge b-bad">prime suspect</span></div>
+    <div class="body">
+      <p>Fits a within-race fixed-effects model for fuel &amp; per-compound degradation, imposes a <b>cliff</b> past a data-driven knee, and regularises fresh-tyre <b>compound offsets</b> toward the known SOFT&lt;MEDIUM&lt;HARD order. Hierarchically shrunk (circuit→global), recency-weighted. Feeds the sim and the analytic economics in generation.</p>
+      <h4>Files</h4><div class="files"><code>params/lapmodel.py</code><code>estimate.py</code><code>circuit.py</code><code>weekend.py</code><code>dnf.py</code><code>startline.py</code></div>
+      <h4>Knobs</h4><div class="knobs"><span class="knob">cliff_rate 0.02</span><span class="knob">knee_percentile 80</span><span class="knob">offset_prior {S:-.35,M:0,H:.25}</span><span class="knob">offset_prior_weight 0.5</span><span class="knob">k_circuit 500</span><span class="knob">k_driver 800</span></div>
+      <div class="fail"><b>BREAK #1 — label-keyed deg vs 2026 nomination shift.</b> Deg/offsets are keyed to the <i>relative</i> label (SOFT/MEDIUM/HARD), fit on 2021–25. When Pirelli nominates a step softer (Barcelona 2026), the label→physical mapping is wrong: the sim rates the wrong tyres fast. <div class="ev">Evidence: Barcelona 2026 recall 100% but set@k 12% — the winning MEDIUM-HARD-HARD is generated but rated ~20s slow.</div></div>
+      <div class="fail"><b>BREAK #2 — soft deg slope over-estimated.</b> A soft stint's modelled deg is too steep, so soft strategies look slow even when they win. <div class="ev">Evidence: Mexico 2025 — SOFT-MEDIUM won from pole, sim rates it E[finish]≈8. This poisons the competitiveness signal (see stage 5).</div></div>
+    </div>
+  </div>
+  <div class="arrow"><span class="flow">LapModel · circuit profile · DNF/start priors</span></div>
+
+  <!-- 3 GENERATION -->
+  <div class="stage" style="--edge:var(--warn)">
+    <div class="head"><span class="idx">3</span>
+      <div><div class="name">generation — candidates + prior + shortlist</div>
+        <div class="role">every rule-legal strategy, pit windows, plausibility prior, family shortlist</div></div>
+      <span class="badge b-warn">order-blind</span></div>
+    <div class="body">
+      <p>Enumerates <b>all</b> rule-legal compound sequences (≥2 compounds, allocation caps), sets pit windows from tyre economics blended toward observed history, and attaches a <b>hierarchical plausibility prior</b>. <code class="mono">shortlist()</code> keeps the best variant of every <i>family</i> = (n_stops, compound multiset).</p>
+      <h4>Plausibility prior</h4>
+      <p class="note"><code class="mono">prior(seq) = P(stops) · P(pattern) · P(start compound) · P(weekend usage)</code> — circuit evidence shrunk toward a recency-weighted global meta.</p>
+      <h4>Files</h4><div class="files"><code>generation/generator.py</code><code>plausibility.py</code></div>
+      <h4>Knobs</h4><div class="knobs"><span class="knob">shortlist_k 16</span><span class="knob">shortlist_prior_weight 6</span><span class="knob">rep_prior_weight 1</span><span class="knob">window_history_weight 0.8</span><span class="knob">undercut_shift 2</span></div>
+      <div class="fail"><b>BREAK #3 — the prior is ORDER-BLIND.</b> <code class="mono">P(pattern)</code> is over the <i>multiset</i> and <code class="mono">P(start)</code> only sees the first compound — nothing distinguishes <code class="mono">MEDIUM-MEDIUM-HARD</code> from <code class="mono">MEDIUM-HARD-MEDIUM</code>. So the shortlist collapses each family to one order and the engine has no signal to rank orderings. <div class="ev">Evidence: this caps order@k. The naive "5 most common historical sequences" baseline (44%) beats the model (36%) on 2025 order.</div></div>
+      <div class="fail warn"><b>Ceiling:</b> generation recall is 90.5% (2025) / 97.1% (2026) — set@k can never exceed this. Recall is <i>not</i> the main problem.</div>
+    </div>
+  </div>
+  <div class="arrow"><span class="flow">~16 Candidate objects (1 order / family)</span></div>
+
+  <!-- 4 SIM -->
+  <div class="stage" style="--edge:var(--warn)">
+    <div class="head"><span class="idx">4</span>
+      <div><div class="name">sim — discrete-event race</div>
+        <div class="role">lap-by-lap: overtaking (+DRS), safety car / VSC, pit stops, traffic</div></div>
+      <span class="badge b-warn">untuned</span></div>
+    <div class="body">
+      <p>Full-field lap-by-lap simulation where track position and traffic actually cost time. Runs each candidate against the field with common random numbers.</p>
+      <h4>Files</h4><div class="files"><code>sim/race.py</code><code>overtaking.py</code><code>safety_car.py</code><code>pitstops.py</code></div>
+      <h4>Knobs (hand-set, not fit)</h4><div class="knobs"><span class="knob">pass_prob 0.12–0.65</span><span class="knob">drs_bonus 0.4</span><span class="knob">sc_factor 1.40</span><span class="knob">pit_jitter_sd 1.5</span><span class="knob">lap1_penalty 2.5</span></div>
+      <div class="fail warn"><b>Watch:</b> overtaking / SC / jitter params are hand-set defaults, never fit. Combined with stage 2, the sim's per-strategy finish is unreliable.</div>
+    </div>
+  </div>
+  <div class="arrow"><span class="flow">finish[K×sims] · race_time[K×sims]</span></div>
+
+  <!-- 5 EVAL -->
+  <div class="stage" style="--edge:var(--bad)">
+    <div class="head"><span class="idx">5</span>
+      <div><div class="name">evaluation — outcome distributions</div>
+        <div class="role">Monte-Carlo → per-candidate finish distribution, E[finish], p_optimal</div></div>
+      <span class="badge b-bad">weak signal</span></div>
+    <div class="body">
+      <p>Summarises the sim into each candidate's finishing-position distribution (the fan-facing numbers) and a competitiveness signal for selection.</p>
+      <h4>Files</h4><div class="files"><code>evaluation/monte_carlo.py</code><code>outcomes.py</code></div>
+      <div class="fail"><b>BREAK #4 — the competitiveness signal barely separates strategies.</b> Across very different strategies E[finish] is nearly identical (e.g. two different plans both 3.72), and where it <i>does</i> separate it's often wrong (stage 2). <div class="ev">Consequence: tuning drove the selector's comp weight to ~0 — the sim is used for the shown finish distributions/tiers but <b>not</b> for choosing the 5. This is the single biggest reason accuracy is capped.</div></div>
+    </div>
+  </div>
+  <div class="arrow"><span class="flow">Outcome per candidate + plausibility prior</span></div>
+
+  <!-- 6 SELECTION -->
+  <div class="stage" style="--edge:var(--warn)">
+    <div class="head"><span class="idx">6</span>
+      <div><div class="name">selection — the shown 5</div>
+        <div class="role">plausibility-mass submodular set-cover under a fixed 5-slot budget</div></div>
+      <span class="badge b-warn">near ceiling</span></div>
+    <div class="body">
+      <p>Chooses the 5 strategies to display. <code class="mono">q = prior^a · comp^b</code> (tuned: <b>a=2.39, b≈0</b> → history-led), soft-gated on competitiveness, then a greedy submodular pick maximises covered plausibility mass with anti-clone / order diversity. Emits tiers: Most likely / Alternative / Long-shot.</p>
+      <h4>Files</h4><div class="files"><code>selection/selector.py</code></div>
+      <h4>Knobs (Optuna-tuned)</h4><div class="knobs"><span class="knob">max_candidates 5</span><span class="knob">prior_exp 2.39</span><span class="knob">comp_exp 0.014</span><span class="knob">comp_temp 2.55</span><span class="knob">gate 12.1</span><span class="knob">order_novelty 0.588</span></div>
+      <div class="fail warn"><b>Selector-skip:</b> ~12% (2026) / ~21% (2025) of realised SETS are in the pool but not shown. These are low-prior year-deviations that history can't predict and the (broken) comp signal can't rescue — so this is bounded by stages 2 &amp; 5, not by the selection rule. Multi-order display was tried to lift order@k and <b>reverted</b> (traded −10.7 set@k for +0.2 order@k under the 5-slot budget).</div>
+    </div>
+  </div>
+  <div class="arrow"><span class="flow">SelectedStrategy × 5 (+tier, p_optimal)</span></div>
+
+  <!-- 7 REPORT -->
+  <div class="stage" style="--edge:var(--ok)">
+    <div class="head"><span class="idx">7</span>
+      <div><div class="name">report — JSON for the site</div>
+        <div class="role">per-driver ranked 5 with pit windows, distributions, tiers</div></div>
+      <span class="badge b-ok">ok</span></div>
+    <div class="body">
+      <p>Serialises the shown 5 per driver with planned pit laps, pit-window ranges, finish distribution, p_win/podium/points, p_dnf, p_optimal, plausibility and tier.</p>
+      <h4>Files</h4><div class="files"><code>report/reporter.py</code></div>
+    </div>
+  </div>
+
+  <h2>Validation &amp; tuning</h2>
+  <div class="card big">
+    <p style="margin:0 0 8px"><code class="mono">validation/backtest.py</code> — expanding-window strategy backtest, parallel across rounds (<code class="mono">--workers</code>), Barcelona excluded from aggregates (2026 nomination shift).</p>
+    <p style="margin:0"><code class="mono">tuning/tune_selection.py</code> — <b>fast</b> tuner: simulate once, cache <code class="mono">(pool, finish, rtime)</code>, then re-run only <code class="mono">select()</code> per trial (400 trials in ~6s). <code class="mono">tuning/optuna_tune.py</code> — full re-fit tuner (slow).</p>
+  </div>
+</div>
+
+<!-- RIGHT: diagnostics -->
+<div>
+  <h2>Measured performance</h2>
+  <div class="card">
+    <h3>Top-5 accuracy vs baselines &amp; ceiling</h3>
+    <table>
+      <tr><th>set@k</th><th>modal-5</th><th>model</th><th>oracle*</th></tr>
+      <tr><td>2025 (18)</td><td class="n">62.4</td><td class="n" style="color:#5ad16f">69.4</td><td class="n" style="color:var(--dim)">98.5</td></tr>
+      <tr><td>2026 excl&nbsp;Barc</td><td class="n">58.8</td><td class="n" style="color:#5ad16f">84.7</td><td class="n" style="color:var(--dim)">97.1</td></tr>
+      <tr><th>order@k</th><th>modal-5</th><th>model</th><th>oracle*</th></tr>
+      <tr><td>2025 (18)</td><td class="n" style="color:#e3b341">44.0</td><td class="n" style="color:#ff7b72">36.1</td><td class="n" style="color:var(--dim)">90.2</td></tr>
+      <tr><td>2026 excl&nbsp;Barc</td><td class="n">50.0</td><td class="n" style="color:#5ad16f">67.1</td><td class="n" style="color:var(--dim)">91.2</td></tr>
+    </table>
+    <p class="note" style="margin-top:8px">*oracle = show the 5 most-common <i>actual</i> strategies of that race (max any 5-slot display can score). recall (generation) = 90.5% / 97.1%.</p>
+    <p class="note" style="margin-top:2px;color:#ff7b72">⚠ 2025 order@k (36.1) is <b>below</b> the trivial modal baseline (44.0) — the order-blind prior (BREAK #3).</p>
+  </div>
+
+  <h2>Where the misses go</h2>
+  <div class="card">
+    <h3>set@k decomposition</h3>
+    <div class="barrow"><span class="lbl">2025 (18)</span>
+      <div class="bar"><i class="seg-shown" style="width:69.4%"></i><i class="seg-skip" style="left:69.4%;width:21.1%"></i><i class="seg-gen" style="left:90.5%;width:9.5%"></i></div></div>
+    <div class="barrow"><span class="lbl">2026 excl Barc</span>
+      <div class="bar"><i class="seg-shown" style="width:84.7%"></i><i class="seg-skip" style="left:84.7%;width:11.8%"></i><i class="seg-gen" style="left:96.5%;width:3.5%"></i></div></div>
+    <div style="display:flex;gap:16px;margin-top:8px;font-size:11.5px;color:var(--dim)">
+      <span><i class="dot seg-shown"></i> shown@5</span>
+      <span><i class="dot seg-skip"></i> in pool, selector skipped</span>
+      <span><i class="dot seg-gen"></i> generator missed</span>
+    </div>
+    <p class="note" style="margin-top:10px">The selector-skip band is the biggest slice, but it's low-prior year-deviations the (broken) pace signal can't rescue — it's bounded by stages&nbsp;2&nbsp;&amp;&nbsp;5, not the selection rule.</p>
+  </div>
+
+  <h2>Prime suspects — where to dig</h2>
+
+  <div class="hot">
+    <h4><span class="rank">1</span>Pace model is label-keyed</h4>
+    <div class="where">stage 2 · params/lapmodel.py</div>
+    <p>2026 tyres a step softer breaks the label→physical map. Fix is nomination-aware: ingest Pirelli C-numbers, or weight 2026 practice long-runs far harder. Biggest single 2026 lever (Barcelona 12→~80 set@k).</p>
+  </div>
+  <div class="hot">
+    <h4><span class="rank">2</span>Prior is order-blind</h4>
+    <div class="where">stage 3 · generation/plausibility.py</div>
+    <p>Track full-<i>sequence</i> frequencies (not just multiset + start) so the pool carries and ranks the right ordering. This is the only real order@k lever — currently order@k &lt; the trivial baseline on 2025.</p>
+  </div>
+  <div class="hot amber">
+    <h4><span class="rank">3</span>Competitiveness signal is unreliable</h4>
+    <div class="where">stages 4–5 · sim + evaluation</div>
+    <p>The sim barely separates strategies and mis-rates soft ones — so tuning discards it for selection. Fixing pace (suspect 1) + fitting the sim's overtaking/SC params would make comp usable, unlocking the ~12–21% selector-skip band.</p>
+  </div>
+  <div class="hot amber">
+    <h4><span class="rank">4</span>Fixed 5-slot budget vs field diversity</h4>
+    <div class="where">stage 6 · structural</div>
+    <p>Fields run ~4.7 distinct sets/race; the oracle ceiling is ~97% set / ~90% order. Real, but not the current bottleneck — suspects 1–3 come first.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>How to reproduce</h3>
+    <p class="note" style="margin:0">
+      <code class="mono">venv/bin/python -m strategy_sim2.validation.backtest --strategy --test-year 2026 --sims 200 --workers 6</code><br>
+      <code class="mono">venv/bin/python -m strategy_sim2.tuning.tune_selection --year 2025 --rounds 2 3 7 11 15 20 21 23</code>
+    </p>
+  </div>
+</div>
+
+</div>
+<div class="foot">strategy_sim2 · generated from the current tuned config &amp; this session's diagnostics · click stages to expand</div>
+</div>
+
+<script>
+  document.querySelectorAll('.stage .head').forEach(h=>{
+    h.addEventListener('click',()=>h.parentElement.classList.toggle('open'));
+  });
+  // open the two prime-suspect stages by default
+  document.querySelectorAll('.stage')[1].classList.add('open'); // params
+  document.querySelectorAll('.stage')[4].classList.add('open'); // evaluation
+</script>
+</body>
+</html>

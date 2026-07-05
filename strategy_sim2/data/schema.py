@@ -28,6 +28,19 @@ def normalize_compound(c: object) -> str:
     return "UNKNOWN"
 
 
+# --- Circuit names ---------------------------------------------------------
+# FastF1's event Location is not stable across seasons for the same venue (Monaco is
+# "Monaco" in 2024-25 but "Monte Carlo" in 2021/2026). An un-normalised name silently
+# SPLITS a circuit's history across two keys: priors, deg fits and circuit_rules each
+# see only a fraction of the data. Canonical names below match the 2026 schedule.
+CIRCUIT_ALIASES = {"Monaco": "Monte Carlo"}
+
+
+def normalize_circuit(name: object) -> str:
+    s = str(name).strip()
+    return CIRCUIT_ALIASES.get(s, s)
+
+
 # --- Track status codes ---------------------------------------------------
 # 1 green, 2 yellow, 4 safety car, 5 red flag, 6 VSC deployed, 7 VSC ending.
 TS_GREEN, TS_YELLOW, TS_SC, TS_RED, TS_VSC = "1", "2", "4", "5", "67"

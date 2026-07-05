@@ -61,21 +61,33 @@ generation:
   min_stops: 1
   max_stops: 3
   min_stint: 6            # minimum laps per stint when placing pit windows
-  shortlist_k: 16         # candidates kept for Monte-Carlo evaluation (covers all families)
+  # Families kept for Monte-Carlo evaluation. MUST cover the full rule-legal family
+  # space (~20 under allocation_sets S3/M3/H2) — a dropped family is invisible to
+  # selection no matter what history later says (Austin 2025's modal M-S died here).
+  shortlist_k: 20
   shortlist_prior_weight: 6.0  # history weight ranking WHICH families make the shortlist
   shortlist_rep_prior_weight: 1.0  # lighter history weight picking the ORDER within a family
-  # (heavy prior over-favours a MEDIUM start even when it means ending on SOFT; economics lead)
+  # Keep a family's 2nd ordering when its (sequence-aware) prior carries at least this
+  # fraction of the primary's — gives selection a real order choice (0 disables).
+  shortlist_second_order_ratio: 0.3
   window_history_weight: 0.8   # MAX weight on observed windows (scales with history richness)
   window_history_k: 4.0        # observed windows needed to reach half of that weight
   undercut_shift_laps: 2.0     # analytic windows shifted earlier (undercut threat), tunable
   # physical tyre-life caps as a fraction of race distance (guards thin-data deg)
   max_stint_frac: {SOFT: 0.5, MEDIUM: 0.7, HARD: 1.0}
-  # physical race allocation: max stints per compound (typical Pirelli fresh sets)
-  allocation_sets: {SOFT: 2, MEDIUM: 2, HARD: 2}
+  # physical race allocation: max STRATEGIC stints per compound. Teams carry 8 softs /
+  # 3 mediums / 2 hards, so 3 soft or 3 medium stints are legal and do happen
+  # (Barcelona 2025's modal S-M-S-S was impossible under the old SOFT:2 cap).
+  allocation_sets: {SOFT: 3, MEDIUM: 3, HARD: 2}
 
-# Circuit-specific rules (e.g. Monaco's mandatory two stops from 2025).
+# Circuit-specific rules: PUBLIC pre-race regulations only (no hindsight). Plain dict =
+# always applies; list entries may carry year / year_from / year_to scoping.
 circuit_rules:
-  Monte Carlo: {min_stops: 2}
+  Monte Carlo:
+    - {year_from: 2025, min_stops: 2}   # mandatory two pit stops from 2025
+  Lusail:
+    - {year: 2023, max_stint_laps: 18}      # FIA/Pirelli mandated tyre-life cap
+    - {year_from: 2025, max_stint_laps: 25} # Pirelli mandated cap (57-lap race -> 2 stops)
 
 # Weekend practice/sprint long-run ingestion (post-quali mode).
 weekend:
@@ -93,6 +105,13 @@ prior:
   alpha: 1.0
   start_blend_k: 12.0      # circuit start-compound evidence to outweigh the global
   pattern_blend_k: 10.0    # circuit strategies to outweigh the recency-weighted global meta
+  order_weight: 1.0        # exponent on P(order | multiset): ranks orderings WITHIN a set
+  same_season_boost: 1.0   # extra weight on target-season races (emerging meta vs stale history)
+  # When a circuit's nomination shifted vs the target year, local strategy history is
+  # counted raw with weight (1-x) and C-number-relabeled with weight x. Strategy choice
+  # is part physical (transfers via C-numbers) and part label-relative (teams plan
+  # around the nominated triple); both extremes measurably lose races.
+  relabel_blend: 0.5
 
 selection:
   # The shown set is chosen to cover the most PLAUSIBILITY MASS under a fixed 5-slot
@@ -127,6 +146,19 @@ params:
   # compound pace offsets: regularise the noisy direct estimate toward the known ordering
   compound_offset_prior: {SOFT: -0.35, MEDIUM: 0.0, HARD: 0.25}
   offset_prior_weight: 0.5
+
+# Pirelli compound nominations (C-numbers) per year+circuit: translates label-keyed
+# history into the target year's label space (deg/knee fits and circuit-local priors).
+nominations:
+  path: strategy_sim2/config/nominations.yaml
+  relabel_laps: false   # translate lap rows for deg/knee fits (drops unmatched C-numbers)
+  relabel_prior: true   # blend relabeled circuit-local strategy history (prior.relabel_blend)
+
+validation:
+  # Circuits excluded from the strategy-backtest AGGREGATE metrics (still shown
+  # per-circuit). Empty since the nomination-aware translation landed — Barcelona no
+  # longer needs excusing.
+  strategy_exclude_circuits: []
 
 cleaning:
   min_strategic_stint: 5   # stints shorter than this are merged (red-flag/SC flurries)

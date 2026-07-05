@@ -21,9 +21,9 @@ from strategy_sim2.context.postquali import build_postquali_context
 from strategy_sim2.data import clean, collector, session_filter
 from strategy_sim2.data.schema import DRY_COMPOUNDS
 from strategy_sim2.evaluation.monte_carlo import evaluate_driver
-from strategy_sim2.generation.generator import generate_candidates, shortlist
+from strategy_sim2.generation.generator import build_pool
 from strategy_sim2.params import circuit, estimate
-from strategy_sim2.selection.selector import select
+from strategy_sim2.selection.selector import field_display, plausibility_mass, select
 from strategy_sim2.settings import load_settings
 
 
@@ -44,10 +44,7 @@ def backtest_race(year: int, rnd: int, ps, profiles, cfg, n_sims: int) -> dict |
                      if r["finish_position"] == r["finish_position"]}
 
     wctx = build_postquali_context(year, rnd, ps, profiles, cfg)
-    pool = shortlist(generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
-                     k=int(cfg["generation"]["shortlist_k"]),
-                     w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
-                     rep_prior_weight=float(cfg["generation"].get("shortlist_rep_prior_weight", 1.0)))
+    pool = build_pool(wctx, cfg)
     pool_families = {(c.n_stops, tuple(sorted(c.compounds))) for c in pool}
     n_pos = len(wctx.drivers())
 
@@ -121,6 +118,7 @@ STRATEGY_FIELDS = [
     "race", "circuit", "driver", "grid", "actual_stops", "actual_comp", "actual_pits",
     "p1_stops", "p1_comp", "p1_pits", "set1", "ord1", "stop1",
     "set_topk", "ord_topk", "in_short", "pit_err_first", "pit_err_all",
+    "shown", "field_shown",
 ]
 
 
@@ -137,19 +135,21 @@ def strategy_backtest_race(year: int, rnd: int, ps, profiles, cfg,
     classified = {str(x["driver"]) for _, x in res.iterrows() if x["classified"]}
 
     wctx = build_postquali_context(year, rnd, ps, profiles, cfg)
-    pool = shortlist(generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
-                     k=int(cfg["generation"]["shortlist_k"]),
-                     w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
-                     rep_prior_weight=float(cfg["generation"].get("shortlist_rep_prior_weight", 1.0)))
+    pool = build_pool(wctx, cfg)
     pool_fams = {(c.n_stops, tuple(sorted(c.compounds))) for c in pool}
     n_pos = len(wctx.drivers())
 
     rows = []
+    q_sum = np.zeros(len(pool))
+    n_q = 0
     for i, d in enumerate(wctx.drivers()):
         if d not in actual or d not in classified:
             continue
         a = actual[d]
         fin, rt = evaluate_driver(wctx, d, pool, n_sims, int(cfg["simulation"]["seed"]) + i)
+        q_d, _, _ = plausibility_mass(pool, fin, rt, cfg, n_pos)
+        q_sum += q_d
+        n_q += 1
         sel = select(pool, fin, rt, cfg, n_pos, wctx.prior)
         p1 = sel[0].candidate
         sel_ms = {tuple(sorted(s.candidate.compounds)) for s in sel}
@@ -176,24 +176,73 @@ def strategy_backtest_race(year: int, rnd: int, ps, profiles, cfg,
             "ord_topk": int(a["compounds"] in sel_seq),
             "in_short": int(a["family"] in pool_fams),
             "pit_err_first": pit_err_first, "pit_err_all": pit_err_all,
+            "shown": _json.dumps(["-".join(s.candidate.compounds) for s in sel]),
         })
+
+    # Race-level display: the same greedy set-cover on field-aggregated plausibility mass.
+    # This is what a per-race fan page shows and what the modal_ord@5/modal_set@5 metrics
+    # score (the product goal: the race's modal strategy must be among the shown 5).
+    if rows and n_q:
+        idx = field_display(pool, q_sum / n_q, cfg)
+        shown = _json.dumps(["-".join(pool[i].compounds) for i in idx])
+        for r in rows:
+            r["field_shown"] = shown
     return rows
 
 
-def summarize_strategy(df: pd.DataFrame) -> None:
+def race_modal_metrics(df: pd.DataFrame, near_margin: int = 2) -> pd.DataFrame:
+    """Race-level PRODUCT metric: is the race's modal ordered strategy — or a near-tied
+    second (within ``near_margin`` runners) — in the race-level shown 5 (``field_shown``)?
+    One row per race with modal_ord / modal_set hits."""
     import json as _json
 
-    def pct(col, d=df):
+    rows = []
+    for race, g in df.groupby("race"):
+        counts = g["actual_comp"].value_counts()
+        modal, modal_n = str(counts.index[0]), int(counts.iloc[0])
+        second = str(counts.index[1]) if len(counts) > 1 else None
+        second_n = int(counts.iloc[1]) if len(counts) > 1 else 0
+        near = second if (second is not None and second_n >= modal_n - near_margin) else None
+        targets = [modal] + ([near] if near else [])
+
+        fs = g["field_shown"].dropna()
+        shown = _json.loads(fs.iloc[0]) if len(fs) else []
+        shown_sets = {tuple(sorted(s.split("-"))) for s in shown}
+        ord_hit = any(t in shown for t in targets)
+        set_hit = any(tuple(sorted(t.split("-"))) in shown_sets for t in targets)
+        rows.append({"race": race, "circuit": str(g["circuit"].iloc[0]),
+                     "modal": modal, "modal_n": modal_n, "near": near or "",
+                     "modal_ord": int(ord_hit), "modal_set": int(set_hit),
+                     "field_shown": " | ".join(shown)})
+    return pd.DataFrame(rows)
+
+
+def summarize_strategy(df: pd.DataFrame, exclude: list[str] | None = None) -> None:
+    # Aggregates are computed EXCLUDING circuits flagged as non-indicative (e.g. a 2026
+    # compound-nomination shift breaks the label-keyed model at Barcelona); the per-circuit
+    # table below still lists them so nothing is hidden.
+    exclude = [str(x) for x in (exclude or [])]
+    dfx = df[~df["circuit"].isin(exclude)] if exclude else df
+
+    def pct(col, d=dfx):
         return 100 * pd.to_numeric(d[col], errors="coerce").mean()
 
-    print(f"\n=== STRATEGY BACKTEST: {len(df)} driver-races, {df['race'].nunique()} races ===")
+    tag = f"  (excl. {', '.join(exclude)})" if exclude else ""
+    print(f"\n=== STRATEGY BACKTEST: {len(dfx)} driver-races, {dfx['race'].nunique()} races{tag} ===")
+    if "field_shown" in df.columns:
+        rm_all = race_modal_metrics(df)
+        rm = rm_all[~rm_all["circuit"].isin(exclude)] if exclude else rm_all
+        print(f"  RACE modal-order in 5   : {100*rm['modal_ord'].mean():5.1f}%  "
+              f"({int(rm['modal_ord'].sum())}/{len(rm)})   <- product metric")
+        print(f"  RACE modal-set in 5     : {100*rm['modal_set'].mean():5.1f}%  "
+              f"({int(rm['modal_set'].sum())}/{len(rm)})")
     print(f"  stop-count top-1        : {pct('stop1'):5.1f}%")
     print(f"  compound-set top-1      : {pct('set1'):5.1f}%")
     print(f"  compound-order top-1    : {pct('ord1'):5.1f}%")
     print(f"  compound-set in top-k   : {pct('set_topk'):5.1f}%")
     print(f"  compound-order in top-k : {pct('ord_topk'):5.1f}%")
     print(f"  generation recall       : {pct('in_short'):5.1f}%")
-    fe = pd.to_numeric(df["pit_err_first"], errors="coerce").dropna()
+    fe = pd.to_numeric(dfx["pit_err_first"], errors="coerce").dropna()
     if len(fe):
         print(f"  first-stop MAE          : {fe.mean():5.1f} laps "
               f"(±3: {100*(fe<=3).mean():.0f}%, ±5: {100*(fe<=5).mean():.0f}%)")
@@ -203,6 +252,10 @@ def summarize_strategy(df: pd.DataFrame) -> None:
         setk=("set_topk", lambda s: 100 * pd.to_numeric(s).mean()),
         recall=("in_short", lambda s: 100 * pd.to_numeric(s).mean()))
     print(per.round(0).to_string())
+    if "field_shown" in df.columns and len(rm_all):
+        print("\nper-race modal (product metric):")
+        cols = ["race", "circuit", "modal", "modal_n", "near", "modal_ord", "modal_set", "field_shown"]
+        print(rm_all[cols].to_string(index=False))
 
 
 def _strategy_race_job(test_year: int, rnd: int, n_sims: int, cfg: dict) -> list[dict]:
@@ -255,7 +308,7 @@ def run_strategy_backtest(test_year: int, rounds: list[int] | None = None,
     df = pd.DataFrame(all_rows)
     if len(df):
         print(f"\n[{n_workers} workers, {_time.time()-t0:.0f}s total]")
-        summarize_strategy(df)          # print results FIRST so a bad path can't lose the run
+        summarize_strategy(df, exclude=cfg.get("validation", {}).get("strategy_exclude_circuits"))
     if out_csv and len(df):
         from pathlib import Path
         Path(out_csv).parent.mkdir(parents=True, exist_ok=True)

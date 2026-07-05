@@ -11,7 +11,7 @@ import time
 
 from strategy_sim2.context.postquali import build_postquali_context
 from strategy_sim2.evaluation.monte_carlo import evaluate_driver
-from strategy_sim2.generation.generator import generate_candidates, shortlist
+from strategy_sim2.generation.generator import build_pool
 from strategy_sim2.params import circuit, estimate
 from strategy_sim2.report.reporter import build_report, write_report
 from strategy_sim2.selection.selector import select
@@ -36,13 +36,7 @@ def run(mode: str, year: int, rnd: int, n_sims: int | None = None,
     else:
         raise ValueError(f"unknown mode: {mode}")
 
-    pool = shortlist(
-        # wctx.params.lap may be the weekend-blended adapter, not the raw historical fit
-        generate_candidates(wctx.profile, wctx.params.lap, wctx.prior, wctx.allocation, cfg),
-        k=int(cfg["generation"]["shortlist_k"]),
-        w_prior=float(cfg["generation"].get("shortlist_prior_weight", 6.0)),
-        rep_prior_weight=float(cfg["generation"].get("shortlist_rep_prior_weight", 1.0)),
-    )
+    pool = build_pool(wctx, cfg)
     if verbose:
         print(f"{wctx.circuit} {year} R{rnd} [{mode}]: {len(wctx.drivers())} drivers, "
               f"{len(pool)} candidates, {n_sims} sims/driver")
